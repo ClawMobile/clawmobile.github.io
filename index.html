@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ClawMobile — Say it. It happens.</title>
+  <meta name="description" content="ClawMobile turns a dedicated Android fun phone into an entertainment autopilot. Chat from Telegram/WhatsApp. The spare phone runs." />
+
+  <style>
+    :root{
+      /* Apple-ish neutral palette (original, not copied) */
+      --bg: #ffffff;
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --tint: #f5f5f7;
+      --border: rgba(0,0,0,.10);
+      --card: #ffffff;
+      --radius: 18px;
+      --max: 980px;
+      --pad: clamp(18px, 3vw, 28px);
+      --h1: clamp(40px, 6vw, 64px);
+      --h2: clamp(28px, 4vw, 44px);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 20px var(--pad) 80px; }
+
+    /* Sticky top nav */
+    .topbar{
+      position: sticky; top:0;
+      backdrop-filter: blur(10px);
+      background: rgba(255,255,255,.78);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      z-index: 10;
+    }
+    .topbar-inner{
+      max-width: var(--max); margin: 0 auto;
+      padding: 12px var(--pad);
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .brandCol{display:flex; flex-direction:column; gap:2px;}
+    .brand{ font-weight: 750; letter-spacing: .2px; }
+    .tagline{ font-size: 12px; color: var(--muted); }
+    .nav{
+      display:flex; flex-wrap:wrap; justify-content:flex-end;
+      gap:8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .nav a{
+      padding: 8px 10px;
+      border-radius: 999px;
+    }
+    .nav a:hover{
+      background: rgba(0,0,0,.04);
+      text-decoration:none;
+    }
+
+    /* Sections */
+    .section{ padding: 64px 0; }
+    .section.tint{
+      background: var(--tint);
+      border-top: 1px solid rgba(0,0,0,.04);
+      border-bottom: 1px solid rgba(0,0,0,.04);
+    }
+
+    .eyebrow{
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h1{
+      font-size: var(--h1);
+      line-height: 1.02;
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+    h2{
+      font-size: var(--h2);
+      line-height: 1.06;
+      margin: 0 0 10px;
+      letter-spacing: -0.02em;
+    }
+    .lead{
+      font-size: clamp(16px, 2vw, 20px);
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 72ch;
+      margin: 0 0 18px;
+    }
+    .fineprint{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-top: 10px;
+    }
+
+    /* CTAs (no waitlist CTA here by design) */
+    .ctaRow{ display:flex; gap:12px; flex-wrap:wrap; margin-top: 16px; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.14);
+      font-weight: 650;
+      font-size: 14px;
+      background: #fff;
+    }
+    .btn.primary{
+      background: #1d1d1f;
+      color: #fff;
+      border-color: #1d1d1f;
+    }
+    .btn:hover{ text-decoration:none; transform: translateY(-1px); }
+
+    /* Full-bleed media block */
+    .bleed{
+      margin-top: 22px;
+      border-radius: 24px;
+      overflow:hidden;
+      border: 1px solid rgba(0,0,0,.08);
+      background: #000;
+    }
+    .bleed video, .bleed img{
+      width:100%; height:auto; display:block;
+    }
+    .bleedPlaceholder{
+      aspect-ratio: 16/9;
+      display:flex; align-items:center; justify-content:center;
+      color: rgba(255,255,255,.78);
+      font-size: 14px;
+      padding: 18px;
+      text-align:center;
+    }
+
+    /* Highlights rail */
+    .railTitle{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:16px;
+      margin-bottom: 14px;
+    }
+    .muted{ color: var(--muted); }
+    .rail{
+      display:flex; gap:14px;
+      overflow-x:auto;
+      padding-bottom: 10px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .card{
+      min-width: min(340px, 88vw);
+      background: var(--card);
+      border: 1px solid rgba(0,0,0,.10);
+      border-radius: var(--radius);
+      overflow:hidden;
+      scroll-snap-align: start;
+    }
+    .cardMedia{
+      aspect-ratio: 16/10;
+      background: linear-gradient(135deg, rgba(0,0,0,.06), rgba(0,0,0,.02));
+      display:flex; align-items:center; justify-content:center;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 14px;
+      text-align:center;
+    }
+    .cardBody{ padding: 14px 14px 16px; }
+    .cardKicker{
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .cardHead{
+      font-size: 18px;
+      margin: 6px 0 6px;
+      letter-spacing: -0.01em;
+    }
+    .cardText{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    /* Callouts / tiles */
+    .callouts{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .callout{
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.10);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    .calloutBig{
+      font-size: 20px;
+      letter-spacing: -0.02em;
+      margin: 0 0 6px;
+    }
+    .calloutSmall{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* Use cases */
+    .useGrid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .useCard{
+      background:#fff;
+      border:1px solid rgba(0,0,0,.10);
+      border-radius: 18px;
+      padding: 14px;
+    }
+    .useTitle{ font-weight: 700; margin: 0 0 6px; }
+    .useText{ margin:0; color: var(--muted); line-height: 1.6; font-size: 14px; }
+
+    /* Prompt chips */
+    .chips{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top: 12px;
+    }
+    .chip{
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.88);
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #1d1d1f;
+      cursor: pointer;
+      user-select:none;
+    }
+    .chip:hover{ background: #fff; transform: translateY(-1px); }
+
+    /* Setup list */
+    .bullets{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* FAQ (accordion) */
+    details{
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.10);
+      border-radius: 16px;
+      padding: 12px 14px;
+    }
+    details + details{ margin-top: 10px; }
+    summary{
+      cursor:pointer;
+      font-weight: 650;
+      list-style:none;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    details p{ margin: 10px 0 0; color: var(--muted); line-height: 1.65; }
+
+    /* Waitlist form */
+    .form{
+      background:#fff;
+      border: 1px solid rgba(0,0,0,.10);
+      border-radius: 20px;
+      padding: 18px;
+      max-width: 600px;
+    }
+    label{ display:block; font-size: 13px; color: var(--muted); margin: 12px 0 6px; }
+    input, select, textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.14);
+      font-size: 14px;
+      outline: none;
+    }
+    textarea{ min-height: 96px; resize: vertical; }
+
+    .footer{
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 860px){
+      .callouts{ grid-template-columns: 1fr; }
+      .useGrid{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sticky top nav (Waitlist link is OK; the form is still the last section) -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brandCol">
+        <div class="brand">ClawMobile</div>
+        <div class="tagline">Say it. It happens.</div>
+      </div>
+      <div class="nav">
+        <a href="#highlights">Highlights</a>
+        <a href="#demo">Demo</a>
+        <a href="#usecases">Use cases</a>
+        <a href="#prompts">Prompts</a>
+        <a href="#setup">Setup</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#faq">FAQ</a>
+        <a href="#waitlist">Waitlist</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="wrap">
+    <section class="section" id="top">
+      <div class="eyebrow">ClawMobile — Closed beta</div>
+
+      <h1>Say it.<br/>It happens.<br/>On a spare phone.</h1>
+
+      <p class="lead">
+        ClawMobile turns a dedicated Android “fun phone” into an entertainment autopilot.
+        Send a message from your main phone — the spare phone opens apps, searches, and plays.
+      </p>
+
+      <div class="callouts">
+        <div class="callout">
+          <p class="calloutBig">Chat, not scripts</p>
+          <p class="calloutSmall">Tell it what you want in natural language.</p>
+        </div>
+        <div class="callout">
+          <p class="calloutBig">No main‑phone app</p>
+          <p class="calloutSmall">Chat from Telegram/WhatsApp and more. Install only on the spare Android device.</p>
+        </div>
+        <div class="callout">
+          <p class="calloutBig">Built to repeat</p>
+          <p class="calloutSmall">Saved commands, schedules, and auto‑retry (available).</p>
+        </div>
+      </div>
+
+      <div class="ctaRow">
+        <a class="btn primary" href="#demo">Watch the demo</a>
+        <a class="btn" href="#highlights">Get the highlights</a>
+      </div>
+
+      <div class="fineprint">
+        One‑time setup required: Developer options + Wireless ADB (same Wi‑Fi).
+      </div>
+
+      <div class="bleed" style="margin-top:22px;">
+        <div class="bleedPlaceholder">
+          Optional hero loop (6–10s): chat bubble → spare phone starts moving
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- HIGHLIGHTS -->
+  <div class="section tint" id="highlights">
+    <div class="wrap">
+      <div class="railTitle">
+        <h2>Get the highlights.</h2>
+        <div class="muted" style="font-size:14px;">Scroll →</div>
+      </div>
+
+      <div class="rail">
+        <div class="card">
+          <div class="cardMedia">Visual: chat UI + “friend-like” conversation</div>
+          <div class="cardBody">
+            <div class="cardKicker">Experience</div>
+            <div class="cardHead">A chat, not an app.</div>
+            <p class="cardText">Message ClawMobile like a friend. Your spare phone does the tapping.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardMedia">Visual: spare phone on a stand</div>
+          <div class="cardBody">
+            <div class="cardKicker">Concept</div>
+            <div class="cardHead">Spare‑phone first.</div>
+            <p class="cardText">Designed for a dedicated entertainment device — keep your main phone personal.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardMedia">Visual: “Set it up once” steps</div>
+          <div class="cardBody">
+            <div class="cardKicker">Setup</div>
+            <div class="cardHead">Set it up once.</div>
+            <p class="cardText">Developer options + Wireless ADB on the spare phone. Then it’s just chat.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardMedia">Visual: “Saved commands” list</div>
+          <div class="cardBody">
+            <div class="cardKicker">Automation (available)</div>
+            <div class="cardHead">Save it. Schedule it.</div>
+            <p class="cardText">Turn a great prompt into a saved command. Run it later — even on a schedule.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardMedia">Visual: retry / recovery state</div>
+          <div class="cardBody">
+            <div class="cardKicker">Reliability (available)</div>
+            <div class="cardHead">Made to keep going.</div>
+            <p class="cardText">Auto‑retry helps complete common flows more reliably.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardMedia">Visual: pause/stop + step viewer</div>
+          <div class="cardBody">
+            <div class="cardKicker">Planned</div>
+            <div class="cardHead">Stop anytime. See every step.</div>
+            <p class="cardText">We’re building instant pause/stop + step visibility for more control.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEMO -->
+  <div class="wrap">
+    <section class="section" id="demo">
+      <h2>One message in. A phone in motion.</h2>
+      <p class="lead">
+        Prompt: <b>“Open YouTube, search ‘lo‑fi beats’, and play the first result.”</b><br/>
+        ClawMobile opens the app, searches results, selects, and starts playing — automatically.
+      </p>
+
+      <div class="bleed">
+        <!-- Replace with your real demo video -->
+        <!--
+        <video src="demo.mp4" controls playsinline muted style="width:100%;height:auto;display:block;"></video>
+        -->
+        <div class="bleedPlaceholder">Drop your 15–30s demo video here (MP4 preferred)</div>
+      </div>
+
+      <div class="fineprint">Watch it happen on the device.</div>
+    </section>
+  </div>
+
+  <!-- CHAPTER: MAIN PHONE PERSONAL -->
+  <div class="section tint">
+    <div class="wrap">
+      <h2>Your main phone stays personal.<br/>Your spare phone does the work.</h2>
+      <p class="lead">
+        Your main phone has messages, photos, accounts, and notifications.
+        ClawMobile keeps automation on a dedicated entertainment device — controlled by chat.
+      </p>
+
+      <div class="callouts">
+        <div class="callout">
+          <p class="calloutBig">No app on your main phone</p>
+          <p class="calloutSmall">Chat from apps you already use — like Telegram or WhatsApp.</p>
+        </div>
+        <div class="callout">
+          <p class="calloutBig">A dedicated “fun phone”</p>
+          <p class="calloutSmall">A cleaner place for automation (fewer private apps and accounts).</p>
+        </div>
+        <div class="callout">
+          <p class="calloutBig">On‑screen execution</p>
+          <p class="calloutSmall">You can watch it run. Step‑by‑step view is planned.</p>
+        </div>
+      </div>
+
+      <div class="bleed" style="background:#fff; border-color:rgba(0,0,0,.08);">
+        <div class="bleedPlaceholder" style="color:var(--muted); background:linear-gradient(135deg, rgba(0,0,0,.05), rgba(0,0,0,.02));">
+          Optional visual: spare phone “entertainment station” setup
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USE CASES -->
+  <div class="wrap">
+    <section class="section" id="usecases">
+      <h2>Made for everyday tasks.</h2>
+      <p class="lead">
+        Start with entertainment. Expand into simple utilities — like price checks — on a dedicated device.
+      </p>
+
+      <div class="useGrid">
+        <div class="useCard">
+          <p class="useTitle">Video</p>
+          <p class="useText"><b>“Play something now.”</b><br/>Open YouTube, search, pick a result, and start playing.</p>
+        </div>
+        <div class="useCard">
+          <p class="useTitle">Music</p>
+          <p class="useText"><b>“Start the soundtrack.”</b><br/>Open a music app and play a playlist you choose.</p>
+        </div>
+        <div class="useCard">
+          <p class="useTitle">Shopping (price check)</p>
+          <p class="useText"><b>“Compare prices before you buy.”</b><br/>Search a product and check prices across stores — hands‑free on a spare phone. <span class="muted">(beta)</span></p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- PROMPTS -->
+  <div class="section tint" id="prompts">
+    <div class="wrap">
+      <h2>Prompts you’ll actually use.</h2>
+      <p class="lead">
+        Try these on a dedicated entertainment phone. Click to copy.
+      </p>
+
+      <div class="chips">
+        <div class="chip">Open YouTube and play a video.</div>
+        <div class="chip">Open YouTube, search “movie trailers”, and play the first result.</div>
+        <div class="chip">Search “lo‑fi beats” on YouTube and start playing.</div>
+        <div class="chip">Play something relaxing on YouTube.</div>
+        <div class="chip">Open a music app and play my playlist.</div>
+        <div class="chip">Play background music for studying.</div>
+        <div class="chip">Compare prices for “Nintendo Switch” on Store A and Store B. (beta)</div>
+        <div class="chip">Open a shopping app and search for “USB‑C cable”. (beta)</div>
+        <div class="chip">Start bedtime routine: lower brightness and play sleep sounds. (planned)</div>
+      </div>
+
+      <div class="fineprint">
+        Tip: Keep prompts simple and specific. More controls are coming during beta.
+      </div>
+
+      <div class="bleed" style="background:#fff; border-color:rgba(0,0,0,.08);">
+        <div class="bleedPlaceholder" style="color:var(--muted); background:linear-gradient(135deg, rgba(0,0,0,.05), rgba(0,0,0,.02));">
+          Optional visual: a strip of screenshots “Prompt → phone actions”
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETUP -->
+  <div class="wrap">
+    <section class="section" id="setup">
+      <h2>Set it up once. Then just chat.</h2>
+      <p class="lead">
+        ClawMobile requires a one‑time setup on the spare Android phone for reliable control.
+        It runs over <b>Wireless ADB</b> on the <b>same Wi‑Fi</b>.
+      </p>
+
+      <ul class="bullets">
+        <li>Enable <b>Developer options</b> on the spare phone</li>
+        <li>Connect via <b>Wireless ADB</b></li>
+        <li>Keep both phones on the <b>same Wi‑Fi</b></li>
+      </ul>
+
+      <div class="fineprint">
+        After setup, it feels like messaging a friend.
+      </div>
+    </section>
+  </div>
+
+  <!-- PRIVACY -->
+  <div class="section tint" id="privacy">
+    <div class="wrap">
+      <h2>Cloud‑powered planning.<br/>Built for a dedicated device.</h2>
+      <p class="lead">
+        ClawMobile processes your instruction in the cloud to plan actions.
+        To complete tasks, it may also process relevant on‑screen context.
+        We recommend using a dedicated entertainment phone with minimal sensitive data.
+      </p>
+
+      <div class="callouts">
+        <div class="callout">
+          <p class="calloutBig">Dedicated‑device approach</p>
+          <p class="calloutSmall">Keep private apps and accounts off the automation phone.</p>
+        </div>
+        <div class="callout">
+          <p class="calloutBig">Clear control (planned)</p>
+          <p class="calloutSmall">Instant pause/stop and step visibility are in progress.</p>
+        </div>
+        <div class="callout">
+          <p class="calloutBig">Waitlist privacy</p>
+          <p class="calloutSmall">We only collect your email and a few preference answers.</p>
+        </div>
+      </div>
+
+      <div class="fineprint">
+        Responsible use: use ClawMobile only on devices you own and in ways that respect app terms and policies.
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="wrap">
+    <section class="section" id="faq">
+      <h2>FAQ</h2>
+      <p class="lead">Short answers, upfront. More details in closed beta.</p>
+
+      <details>
+        <summary>Do I need to install anything on my main phone?</summary>
+        <p>No. You chat from apps you already use. Install ClawMobile only on the spare Android phone.</p>
+      </details>
+
+      <details>
+        <summary>What does setup require?</summary>
+        <p>A one‑time setup on the spare phone: Developer options + Wireless ADB. Both phones need the same Wi‑Fi.</p>
+      </details>
+
+      <details>
+        <summary>Is ClawMobile Android‑only?</summary>
+        <p>Yes, during the closed beta.</p>
+      </details>
+
+      <details>
+        <summary>Can I save commands and run them later?</summary>
+        <p>Yes. Saved commands and schedules are available.</p>
+      </details>
+
+      <details>
+        <summary>What if something fails mid‑task?</summary>
+        <p>Auto‑retry is available to improve reliability on common flows.</p>
+      </details>
+
+      <details>
+        <summary>Can I stop it instantly?</summary>
+        <p>Instant pause/stop is planned. We’re building it now.</p>
+      </details>
+
+      <details>
+        <summary>Does it support voice?</summary>
+        <p>Voice control is planned. Waitlist members will get early updates.</p>
+      </details>
+    </section>
+  </div>
+
+  <!-- WAITLIST (LAST) -->
+  <div class="wrap">
+    <section class="section" id="waitlist">
+      <div class="eyebrow">Closed beta</div>
+      <h2>Get early access.</h2>
+      <p class="lead">
+        Join the waitlist for beta invites, updates, and the first look at voice control (coming soon).
+      </p>
+
+      <div class="form">
+        <!-- Replace action with your Formspree/Getform/Formspark endpoint -->
+        <form method="POST" action="https://formspree.io/f/xxxxxx">
+          <label>Email (required)</label>
+          <input name="email" type="email" required placeholder="you@example.com" />
+
+          <label>Which chat app would you like to use?</label>
+          <select name="chat_app">
+            <option value="">Select</option>
+            <option>Telegram</option>
+            <option>WhatsApp</option>
+            <option>Other</option>
+          </select>
+
+          <label>Do you have a spare Android phone?</label>
+          <select name="spare_android">
+            <option value="">Select</option>
+            <option>Yes</option>
+            <option>Not yet</option>
+          </select>
+
+          <label>Setup comfort level</label>
+          <select name="setup_level">
+            <option value="">Select</option>
+            <option>I can follow a step‑by‑step guide</option>
+            <option>I prefer plug‑and‑play</option>
+          </select>
+
+          <label>What would you automate first?</label>
+          <select name="first_use_case">
+            <option value="">Select</option>
+            <option>Video (YouTube)</option>
+            <option>Music</option>
+            <option>Price check (shopping)</option>
+            <option>Other</option>
+          </select>
+
+          <label>Anything you’d love it to do? (optional)</label>
+          <textarea name="wishlist" placeholder='Example: "Search for a product and open the best deal."'></textarea>
+
+          <div style="margin-top:12px;">
+            <button class="btn primary" type="submit" style="width:100%; border-radius:14px; padding:12px 14px;">
+              Join the waitlist
+            </button>
+          </div>
+
+          <p class="fineprint" style="margin:10px 0 0;">
+            We’ll only email you about early access and product updates. Unsubscribe anytime.
+          </p>
+        </form>
+      </div>
+
+      <div class="footer">
+        © 2026 ClawMobile · Contact: hello@yourdomain.com · Privacy Policy<br/>
+        Telegram and WhatsApp are third‑party services. No affiliation or endorsement is implied.<br/>
+        Features marked “planned” may change during beta.
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Click-to-copy for prompt chips
+    (function(){
+      const chips = document.querySelectorAll('.chip');
+      chips.forEach(chip => {
+        chip.addEventListener('click', async () => {
+          const text = chip.textContent.trim();
+          try{
+            await navigator.clipboard.writeText(text);
+            const old = chip.textContent;
+            chip.textContent = 'Copied ✓';
+            setTimeout(()=> chip.textContent = old, 900);
+          }catch(e){
+            // Clipboard may be blocked; no-op.
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
