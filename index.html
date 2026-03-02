@@ -398,7 +398,7 @@
 
         <div class="card">
           <div class="cardMedia">
-            <iframe width="250" height="400" src="https://www.youtube.com/embed/_-9RAgMhwas" title="Ice cream demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe width="250" height="400" src="https://www.youtube.com/embed/_-9RAgMhwas" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
           <div class="cardBody">
             <div class="cardKicker">Smart Shopping</div>
@@ -409,7 +409,7 @@
 
         <div class="card">
           <div class="cardMedia">
-            <iframe width="250" height="400" src="https://www.youtube.com/embed/qXxNgWw-b58" title="Maps demo for Mobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe width="250" height="400" src="https://www.youtube.com/embed/qXxNgWw-b58" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
           <div class="cardBody">
             <div class="cardKicker">Navigation Made Easy</div>
@@ -420,7 +420,7 @@
 
         <div class="card">
           <div class="cardMedia">
-            <iframe width="250" height="400" src="https://www.youtube.com/embed/Q-9FjDCYFdQ" title="Chrome demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe width="250" height="400" src="https://www.youtube.com/embed/Q-9FjDCYFdQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
           <div class="cardBody">
             <div class="cardKicker">Instant Search</div>
@@ -431,7 +431,7 @@
 
         <div class="card">
           <div class="cardMedia">
-            <iframe width="250" height="400" src="https://www.youtube.com/embed/g4HPLKTBkps" title="Hardware demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe width="250" height="400" src="https://www.youtube.com/embed/g4HPLKTBkps" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
           <div class="cardBody">
             <div class="cardKicker">Device Dashboard</div>
@@ -442,7 +442,7 @@
 
         <div class="card">
           <div class="cardMedia">
-            <iframe width="250" height="400" src="https://www.youtube.com/embed/ysna5JY6vU0" title="System demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe width="250" height="400" src="https://www.youtube.com/embed/ysna5JY6vU0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
           <div class="cardBody">
             <div class="cardKicker">Smart Settings</div>
@@ -453,7 +453,7 @@
 
         <div class="card">
           <div class="cardMedia">
-            <iframe width="250" height="400" src="https://www.youtube.com/embed/z-Vqi6etUdI" title="Script demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe width="250" height="400" src="https://www.youtube.com/embed/z-Vqi6etUdI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
           <div class="cardBody">
             <div class="cardKicker">Scripting Power</div>
@@ -479,7 +479,7 @@
         <!--
         <video src="demo.mp4" controls playsinline muted style="width:100%;height:auto;display:block;"></video>
         -->
-        <iframe class="demoVideo" src="https://www.youtube.com/embed/_-9RAgMhwas" title="Ice cream demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe class="demoVideo" src="https://www.youtube.com/embed/_-9RAgMhwas" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
 
       <!-- <div class="fineprint">Watch it happen on the device.</div> -->
@@ -680,8 +680,10 @@
       </p>
 
       <div class="form">
-        <!-- Replace action with your Formspree/Getform/Formspark endpoint -->
-        <form method="POST" action="https://formspree.io/f/xxxxxx">
+        <!-- Replace action with your real Formspree endpoint -->
+        <form id="waitlistForm" method="POST" action="https://formspree.io/f/xzdalpej">
+          <input type="hidden" name="_subject" value="New ClawMobile waitlist signup" />
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true" />
           <label>Email (required)</label>
           <input name="email" type="email" required placeholder="you@example.com" />
 
@@ -728,6 +730,7 @@
           <p class="fineprint" style="margin:10px 0 0;">
             We’ll only email you about early access and product updates. Unsubscribe anytime.
           </p>
+          <p id="waitlistStatus" class="fineprint" style="margin:8px 0 0;" aria-live="polite"></p>
         </form>
       </div>
 
@@ -756,6 +759,43 @@
             // Clipboard may be blocked; no-op.
           }
         });
+      });
+    })();
+
+    // Formspree async submit for waitlist
+    (function(){
+      const form = document.getElementById('waitlistForm');
+      if(!form){ return; }
+
+      const status = document.getElementById('waitlistStatus');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const endpoint = form.getAttribute('action') || '';
+
+      form.addEventListener('submit', async (event) => {
+        if(!endpoint.includes('formspree.io/f/')){ return; }
+        event.preventDefault();
+
+        if(status){ status.textContent = 'Submitting...'; }
+        if(submitBtn){ submitBtn.disabled = true; }
+
+        try{
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+          });
+
+          if(response.ok){
+            form.reset();
+            if(status){ status.textContent = 'Thanks. You are on the waitlist.'; }
+          }else{
+            if(status){ status.textContent = 'Submission failed. Please try again.'; }
+          }
+        }catch(error){
+          if(status){ status.textContent = 'Network error. Please try again.'; }
+        }finally{
+          if(submitBtn){ submitBtn.disabled = false; }
+        }
       });
     })();
   </script>
