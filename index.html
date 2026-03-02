@@ -50,6 +50,7 @@
       display:flex; align-items:center; justify-content:space-between; gap:12px;
     }
     .brandCol{display:flex; flex-direction:column; gap:2px;}
+    .brandCol:hover{ text-decoration: none; }
     .brand{ font-weight: 750; letter-spacing: .2px; }
     .tagline{ font-size: 12px; color: var(--muted); }
     .nav{
@@ -315,10 +316,10 @@
   <!-- Sticky top nav (Waitlist link is OK; the form is still the last section) -->
   <div class="topbar">
     <div class="topbar-inner">
-      <div class="brandCol">
+      <a class="brandCol" href="/">
         <div class="brand">ClawMobile</div>
         <div class="tagline">An AI agent in your pocket.</div>
-      </div>
+      </a>
       <div class="nav">
         <a href="#highlights">Highlights</a>
         <a href="#demo">Demo</a>
