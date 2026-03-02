@@ -139,6 +139,12 @@
     .bleed video, .bleed img{
       width:100%; height:auto; display:block;
     }
+    .demoVideo{
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      display: block;
+      border: 0;
+    }
     .bleedPlaceholder{
       aspect-ratio: 16/9;
       display:flex; align-items:center; justify-content:center;
@@ -464,7 +470,7 @@
     <section class="section" id="demo">
       <h2>One message in. A phone in motion.</h2>
       <p class="lead">
-        Prompt: <b>“Open YouTube, search ‘lo‑fi beats’, and play the first result.”</b><br/>
+        Prompt: <b>“Please open the YouTube app and search the MV of Ed Sheeran's Bad Habits.”</b><br/>
         ClawMobile opens the app, searches results, selects, and starts playing — automatically.
       </p>
 
@@ -473,10 +479,10 @@
         <!--
         <video src="demo.mp4" controls playsinline muted style="width:100%;height:auto;display:block;"></video>
         -->
-        <iframe width="800" height="400" src="https://www.youtube.com/embed/_-9RAgMhwas" title="Ice cream demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe class="demoVideo" src="https://www.youtube.com/embed/_-9RAgMhwas" title="Ice cream demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
 
-      <div class="fineprint">Watch it happen on the device.</div>
+      <!-- <div class="fineprint">Watch it happen on the device.</div> -->
     </section>
   </div>
 
