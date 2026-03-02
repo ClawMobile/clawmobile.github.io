@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ClawMobile — Say it. It happens.</title>
-  <meta name="description" content="ClawMobile turns a dedicated Android fun phone into an entertainment autopilot. Chat from Telegram/WhatsApp. The spare phone runs." />
+  <title>ClawMobile — An AI agent in your pocket.</title>
+  <meta name="description" content="ClawMobile turns your phone into a pocket-sized agent that goes beyond OpenClaw’s server‑style automation: it runs locally, drives the Android UI with semantic actions, and completes on‑device tasks by interacting with apps, settings, and system UI wherever you are." />
 
   <style>
     :root{
@@ -199,7 +199,7 @@
     /* Callouts / tiles */
     .callouts{
       display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 12px;
       margin-top: 16px;
     }
@@ -317,16 +317,16 @@
     <div class="topbar-inner">
       <div class="brandCol">
         <div class="brand">ClawMobile</div>
-        <div class="tagline">Say it. It happens.</div>
+        <div class="tagline">An AI agent in your pocket.</div>
       </div>
       <div class="nav">
         <a href="#highlights">Highlights</a>
         <a href="#demo">Demo</a>
-        <a href="#usecases">Use cases</a>
-        <a href="#prompts">Prompts</a>
-        <a href="#setup">Setup</a>
-        <a href="#privacy">Privacy</a>
-        <a href="#faq">FAQ</a>
+        <!-- <a href="#usecases">Use cases</a> -->
+        <!-- <a href="#prompts">Prompts</a> -->
+        <!-- <a href="#setup">Setup</a> -->
+        <!-- <a href="#privacy">Privacy</a> -->
+        <!-- <a href="#faq">FAQ</a> -->
         <a href="#waitlist">Waitlist</a>
       </div>
     </div>
@@ -335,44 +335,47 @@
   <!-- HERO -->
   <div class="wrap">
     <section class="section" id="top">
-      <div class="eyebrow">ClawMobile — Closed beta</div>
+      <!-- <div class="eyebrow">ClawMobile — Closed beta</div> -->
 
-      <h1>Say it.<br/>It happens.<br/>On a spare phone.</h1>
+      <h1>ClawMobile <br/> An AI agent in your pocket.</h1>
 
       <p class="lead">
-        ClawMobile turns a dedicated Android “fun phone” into an entertainment autopilot.
-        Send a message from your main phone — the spare phone opens apps, searches, and plays.
+        ClawMobile turns your phone into a pocket-sized agent that goes beyond OpenClaw’s server‑style automation: it runs locally, drives the Android UI with semantic actions, and completes on‑device tasks by interacting with apps, settings, and system UI wherever you are.
       </p>
 
       <div class="callouts">
         <div class="callout">
-          <p class="calloutBig">Chat, not scripts</p>
-          <p class="calloutSmall">Tell it what you want in natural language.</p>
+          <p class="calloutBig">Local runtime</p>
+          <p class="calloutSmall">Runs fully on-device without requiring a remote control server.</p>
         </div>
         <div class="callout">
-          <p class="calloutBig">No main‑phone app</p>
-          <p class="calloutSmall">Chat from Telegram/WhatsApp and more. Install only on the spare Android device.</p>
+          <p class="calloutBig">OpenClaw as orchestration layer</p>
+          <p class="calloutSmall">Reusable tools and skills plug into existing OpenClaw interfaces.</p>
         </div>
         <div class="callout">
-          <p class="calloutBig">Built to repeat</p>
-          <p class="calloutSmall">Saved commands, schedules, and auto‑retry (available).</p>
+          <p class="calloutBig">Semantic UI control</p>
+          <p class="calloutSmall">Accessibility-driven actions and ADB, instead of fragile coordinate-based automation.</p>
+        </div>
+        <div class="callout">
+          <p class="calloutBig">Extensible control pipeline</p>
+          <p class="calloutSmall">Add tools or providers without rewriting the agent loop.</p>
         </div>
       </div>
 
       <div class="ctaRow">
-        <a class="btn primary" href="#demo">Watch the demo</a>
         <a class="btn" href="#highlights">Get the highlights</a>
+        <a class="btn primary" href="#demo">Watch the demo</a>
       </div>
 
-      <div class="fineprint">
+      <!-- <div class="fineprint">
         One‑time setup required: Developer options + Wireless ADB (same Wi‑Fi).
-      </div>
+      </div> -->
 
-      <div class="bleed" style="margin-top:22px;">
+      <!-- <div class="bleed" style="margin-top:22px;">
         <div class="bleedPlaceholder">
           Optional hero loop (6–10s): chat bubble → spare phone starts moving
         </div>
-      </div>
+      </div> -->
     </section>
   </div>
 
@@ -385,57 +388,70 @@
       </div>
 
       <div class="rail">
+
         <div class="card">
-          <div class="cardMedia">Visual: chat UI + “friend-like” conversation</div>
+          <div class="cardMedia">
+            <iframe width="250" height="400" src="https://www.youtube.com/embed/_-9RAgMhwas" title="Ice cream demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
           <div class="cardBody">
-            <div class="cardKicker">Experience</div>
-            <div class="cardHead">A chat, not an app.</div>
-            <p class="cardText">Message ClawMobile like a friend. Your spare phone does the tapping.</p>
+            <div class="cardKicker">Icecream Demo</div>
+            <div class="cardHead">Head</div>
+            <p class="cardText">Order Ice Cream</p>
           </div>
         </div>
 
         <div class="card">
-          <div class="cardMedia">Visual: spare phone on a stand</div>
+          <div class="cardMedia">
+            <iframe width="250" height="400" src="https://www.youtube.com/embed/_-9RAgMhwas" title="Ice cream demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
           <div class="cardBody">
-            <div class="cardKicker">Concept</div>
-            <div class="cardHead">Spare‑phone first.</div>
-            <p class="cardText">Designed for a dedicated entertainment device — keep your main phone personal.</p>
+            <div class="cardKicker">Hardware Demo</div>
+            <div class="cardHead"></div>
+            <p class="cardText"></p>
           </div>
         </div>
 
         <div class="card">
-          <div class="cardMedia">Visual: “Set it up once” steps</div>
+          <div class="cardMedia">
+            <iframe width="250" height="400" src="https://www.youtube.com/embed/_-9RAgMhwas" title="Ice cream demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
           <div class="cardBody">
-            <div class="cardKicker">Setup</div>
-            <div class="cardHead">Set it up once.</div>
-            <p class="cardText">Developer options + Wireless ADB on the spare phone. Then it’s just chat.</p>
+            <div class="cardKicker">System Demo</div>
+            <div class="cardHead"></div>
+            <p class="cardText"></p>
           </div>
         </div>
 
         <div class="card">
-          <div class="cardMedia">Visual: “Saved commands” list</div>
+          <div class="cardMedia">
+            <iframe width="250" height="400" src="https://www.youtube.com/embed/_-9RAgMhwas" title="Ice cream demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
           <div class="cardBody">
-            <div class="cardKicker">Automation (available)</div>
-            <div class="cardHead">Save it. Schedule it.</div>
-            <p class="cardText">Turn a great prompt into a saved command. Run it later — even on a schedule.</p>
+            <div class="cardKicker">Chrome Demo</div>
+            <div class="cardHead"></div>
+            <p class="cardText"></p>
           </div>
         </div>
 
         <div class="card">
-          <div class="cardMedia">Visual: retry / recovery state</div>
+          <div class="cardMedia">
+            <iframe width="250" height="400" src="https://www.youtube.com/embed/_-9RAgMhwas" title="Ice cream demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
           <div class="cardBody">
-            <div class="cardKicker">Reliability (available)</div>
-            <div class="cardHead">Made to keep going.</div>
-            <p class="cardText">Auto‑retry helps complete common flows more reliably.</p>
+            <div class="cardKicker">Maps Demo</div>
+            <div class="cardHead"></div>
+            <p class="cardText"></p>
           </div>
         </div>
 
         <div class="card">
-          <div class="cardMedia">Visual: pause/stop + step viewer</div>
+          <div class="cardMedia">
+            <iframe width="250" height="400" src="https://www.youtube.com/embed/_-9RAgMhwas" title="Ice cream demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
           <div class="cardBody">
-            <div class="cardKicker">Planned</div>
-            <div class="cardHead">Stop anytime. See every step.</div>
-            <p class="cardText">We’re building instant pause/stop + step visibility for more control.</p>
+            <div class="cardKicker">Script Demo</div>
+            <div class="cardHead"></div>
+            <p class="cardText"></p>
           </div>
         </div>
       </div>
@@ -456,7 +472,7 @@
         <!--
         <video src="demo.mp4" controls playsinline muted style="width:100%;height:auto;display:block;"></video>
         -->
-        <div class="bleedPlaceholder">Drop your 15–30s demo video here (MP4 preferred)</div>
+        <iframe width="800" height="400" src="https://www.youtube.com/embed/_-9RAgMhwas" title="Ice cream demo for ClawMobile" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
 
       <div class="fineprint">Watch it happen on the device.</div>
@@ -464,7 +480,7 @@
   </div>
 
   <!-- CHAPTER: MAIN PHONE PERSONAL -->
-  <div class="section tint">
+  <!-- <div class="section tint">
     <div class="wrap">
       <h2>Your main phone stays personal.<br/>Your spare phone does the work.</h2>
       <p class="lead">
@@ -493,10 +509,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- USE CASES -->
-  <div class="wrap">
+  <!-- <div class="wrap">
     <section class="section" id="usecases">
       <h2>Made for everyday tasks.</h2>
       <p class="lead">
@@ -518,10 +534,10 @@
         </div>
       </div>
     </section>
-  </div>
+  </div> -->
 
   <!-- PROMPTS -->
-  <div class="section tint" id="prompts">
+  <!-- <div class="section tint" id="prompts">
     <div class="wrap">
       <h2>Prompts you’ll actually use.</h2>
       <p class="lead">
@@ -550,10 +566,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- SETUP -->
-  <div class="wrap">
+  <!-- <div class="wrap">
     <section class="section" id="setup">
       <h2>Set it up once. Then just chat.</h2>
       <p class="lead">
@@ -571,10 +587,10 @@
         After setup, it feels like messaging a friend.
       </div>
     </section>
-  </div>
+  </div> -->
 
   <!-- PRIVACY -->
-  <div class="section tint" id="privacy">
+  <!-- <div class="section tint" id="privacy">
     <div class="wrap">
       <h2>Cloud‑powered planning.<br/>Built for a dedicated device.</h2>
       <p class="lead">
@@ -602,10 +618,10 @@
         Responsible use: use ClawMobile only on devices you own and in ways that respect app terms and policies.
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- FAQ -->
-  <div class="wrap">
+  <!-- <div class="wrap">
     <section class="section" id="faq">
       <h2>FAQ</h2>
       <p class="lead">Short answers, upfront. More details in closed beta.</p>
@@ -645,7 +661,7 @@
         <p>Voice control is planned. Waitlist members will get early updates.</p>
       </details>
     </section>
-  </div>
+  </div> -->
 
   <!-- WAITLIST (LAST) -->
   <div class="wrap">
