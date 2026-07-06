@@ -985,22 +985,19 @@
       </div>
     </section>
 
-    <section class="section alt" id="updates">
+    <section class="section alt" id="waitlist">
       <div class="wrap">
         <div class="sectionHeader">
-          <p class="eyebrow">Stay current</p>
-          <h2>Get release updates and preview notes.</h2>
+          <p class="eyebrow">Waitlist</p>
+          <h2>Join the ClawMobile waitlist.</h2>
           <p class="lead">
-            Follow the GitHub repository for source, issues, releases, and documentation. You can also leave an email for occasional ClawMobile updates.
+            Leave your email for early access updates, Google Play and App Store launch notifications, and preview invitations.
           </p>
-          <div class="ctaRow">
-            <a class="btn primary" href="https://github.com/ClawMobile/ClawMobile/releases/latest" target="_blank" rel="noopener noreferrer">Latest release</a>
-          </div>
         </div>
 
         <div class="form">
-          <form id="updatesForm" method="POST" action="https://formspree.io/f/xzdalpej">
-            <input type="hidden" name="_subject" value="New ClawMobile update signup" />
+          <form id="waitlistForm" method="POST" action="https://formspree.io/f/xzdalpej">
+            <input type="hidden" name="_subject" value="New ClawMobile waitlist signup" />
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true" />
 
             <label for="email">Email</label>
@@ -1027,10 +1024,10 @@
             <textarea id="wishlist" name="wishlist" placeholder="Example: record a repeatable workflow and run it later as a skill."></textarea>
 
             <div style="margin-top:12px;">
-              <button class="btn primary" type="submit" style="width:100%;">Get updates</button>
+              <button class="btn primary" type="submit" style="width:100%;">Join the waitlist</button>
             </div>
 
-            <p id="updatesStatus" class="lead" style="font-size:13px;margin:10px 0 0;" aria-live="polite"></p>
+            <p id="waitlistStatus" class="lead" style="font-size:13px;margin:10px 0 0;" aria-live="polite"></p>
           </form>
         </div>
       </div>
@@ -1046,10 +1043,10 @@
 
   <script>
     (function(){
-      const form = document.getElementById('updatesForm');
+      const form = document.getElementById('waitlistForm');
       if(!form){ return; }
 
-      const status = document.getElementById('updatesStatus');
+      const status = document.getElementById('waitlistStatus');
       const submitBtn = form.querySelector('button[type="submit"]');
       const endpoint = form.getAttribute('action') || '';
 
@@ -1069,7 +1066,7 @@
 
           if(response.ok){
             form.reset();
-            if(status){ status.textContent = 'Thanks. You are on the update list.'; }
+            if(status){ status.textContent = 'Thanks. You are on the waitlist.'; }
           }else{
             if(status){ status.textContent = 'Submission failed. Please try again.'; }
           }
