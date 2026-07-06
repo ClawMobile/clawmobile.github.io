@@ -3,772 +3,1056 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ClawMobile — An AI agent in your pocket.</title>
-  <meta name="description" content="ClawMobile turns your phone into a pocket-sized agent that goes beyond OpenClaw’s server‑style automation: it runs locally, drives the Android UI with semantic actions, and completes on‑device tasks by interacting with apps, settings, and system UI wherever you are." />
+  <title>ClawMobile - Android companion for phone-native AI agents</title>
+  <meta name="description" content="ClawMobile is a public-preview Android companion and Termux runtime for running phone-native AI agent tasks, generated skills, trusted-agent messaging, and OpenClaw mobile automation on real Android devices." />
 
   <style>
     :root{
-      /* Apple-ish neutral palette (original, not copied) */
       --bg: #ffffff;
-      --text: #1d1d1f;
+      --ink: #1d1d1f;
       --muted: #6e6e73;
-      --tint: #f5f5f7;
-      --border: rgba(0,0,0,.10);
-      --card: #ffffff;
+      --surface: #ffffff;
+      --surface-alt: #f5f5f7;
+      --line: rgba(0, 0, 0, .10);
+      --accent: #0071e3;
+      --accent-dark: #0066cc;
+      --accent-soft: #e8f2ff;
+      --warning: #9b5b14;
+      --warning-soft: #fff1dc;
       --radius: 18px;
-      --max: 980px;
-      --pad: clamp(18px, 3vw, 28px);
-      --h1: clamp(40px, 6vw, 64px);
-      --h2: clamp(28px, 4vw, 44px);
+      --max: 1120px;
+      --pad: 24px;
     }
 
-    *{ box-sizing:border-box; }
+    *{ box-sizing: border-box; }
+    html{ scroll-behavior: smooth; }
     body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg);
-      color: var(--text);
+      color: var(--ink);
       -webkit-font-smoothing: antialiased;
-      text-rendering: geometricPrecision;
+      text-rendering: optimizeLegibility;
     }
     a{ color: inherit; text-decoration: none; }
     a:hover{ text-decoration: underline; }
 
-    .wrap{ max-width: var(--max); margin: 0 auto; padding: 20px var(--pad) 80px; }
+    .wrap{
+      width: min(var(--max), calc(100% - 48px));
+      margin: 0 auto;
+    }
 
-    /* Sticky top nav */
     .topbar{
-      position: sticky; top:0;
-      backdrop-filter: blur(10px);
-      background: rgba(255,255,255,.78);
-      border-bottom: 1px solid rgba(0,0,0,.06);
-      z-index: 10;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(0, 0, 0, .06);
+      background: rgba(255, 255, 255, .78);
+      backdrop-filter: blur(12px);
     }
-    .topbar-inner{
-      max-width: var(--max); margin: 0 auto;
-      padding: 12px var(--pad);
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    .topbarInner{
+      width: min(var(--max), calc(100% - 48px));
+      min-height: 64px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
     }
-    .brandCol{display:flex; flex-direction:column; gap:2px;}
-    .brandCol:hover{ text-decoration: none; }
-    .brand{ font-weight: 750; letter-spacing: .2px; }
-    .tagline{ font-size: 12px; color: var(--muted); }
-    .nav{
-      display:flex; flex-wrap:wrap; justify-content:flex-end;
-      gap:8px;
+    .brandBlock{
+      display: grid;
+      gap: 2px;
+      min-width: max-content;
+    }
+    .brandBlock:hover{ text-decoration: none; }
+    .brand{
+      font-size: 16px;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+    .tagline{
+      font-size: 12px;
       color: var(--muted);
+      letter-spacing: 0;
+    }
+    .nav{
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 4px;
       font-size: 13px;
+      color: var(--muted);
     }
     .nav a{
       padding: 8px 10px;
-      border-radius: 999px;
+      border-radius: var(--radius);
     }
     .nav a:hover{
-      background: rgba(0,0,0,.04);
-      text-decoration:none;
+      background: rgba(0, 0, 0, .04);
+      text-decoration: none;
     }
 
-    /* Sections */
-    .section{ padding: 64px 0; }
-    .section.tint{
-      background: var(--tint);
-      border-top: 1px solid rgba(0,0,0,.04);
-      border-bottom: 1px solid rgba(0,0,0,.04);
-    }
-
-    .eyebrow{
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-
-    h1{
-      font-size: var(--h1);
-      line-height: 1.02;
-      margin: 0 0 12px;
-      letter-spacing: -0.02em;
-    }
-    h2{
-      font-size: var(--h2);
-      line-height: 1.06;
-      margin: 0 0 10px;
-      letter-spacing: -0.02em;
-    }
-    .lead{
-      font-size: clamp(16px, 2vw, 20px);
-      line-height: 1.55;
-      color: var(--muted);
-      max-width: 80ch;
-      margin: 0 0 18px;
-    }
-    .fineprint{
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.55;
-      margin-top: 10px;
-    }
-
-    /* CTAs (no waitlist CTA here by design) */
-    .ctaRow{ display:flex; gap:12px; flex-wrap:wrap; margin-top: 16px; }
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding: 12px 16px;
-      border-radius: 999px;
-      border: 1px solid rgba(0,0,0,.14);
-      font-weight: 650;
-      font-size: 14px;
+    .hero{
+      position: relative;
+      min-height: auto;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-start;
       background: #fff;
+      color: var(--ink);
     }
-    .btn.primary{
-      background: #1d1d1f;
-      color: #fff;
-      border-color: #1d1d1f;
+    .heroContent{
+      position: relative;
+      z-index: 1;
+      width: min(var(--max), calc(100% - 48px));
+      margin: 0 auto;
+      padding: 88px 0 72px;
     }
-    .btn:hover{ text-decoration:none; transform: translateY(-1px); }
-
-    /* Full-bleed media block */
-    .bleed{
-      margin-top: 22px;
-      border-radius: 24px;
-      overflow:hidden;
-      border: 1px solid rgba(0,0,0,.08);
-      background: #000;
-    }
-    .bleed video, .bleed img{
-      width:100%; height:auto; display:block;
-    }
-    .demoVideo{
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      display: block;
-      border: 0;
-    }
-    .bleedPlaceholder{
-      aspect-ratio: 16/9;
-      display:flex; align-items:center; justify-content:center;
-      color: rgba(255,255,255,.78);
-      font-size: 14px;
-      padding: 18px;
-      text-align:center;
-    }
-
-    /* Highlights rail */
-    .railTitle{
-      display:flex; align-items:flex-end; justify-content:space-between; gap:16px;
-      margin-bottom: 14px;
-    }
-    .muted{ color: var(--muted); }
-    .rail{
-      display:flex; gap:14px;
-      overflow-x:auto;
-      padding-bottom: 10px;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-    }
-    .card{
-      min-width: min(340px, 88vw);
-      background: var(--card);
-      border: 1px solid rgba(0,0,0,.10);
-      border-radius: var(--radius);
-      overflow:hidden;
-      scroll-snap-align: start;
-    }
-    .cardMedia{
-      aspect-ratio: 16/10;
-      background: linear-gradient(135deg, rgba(0,0,0,.06), rgba(0,0,0,.02));
-      display:flex; align-items:center; justify-content:center;
+    .eyebrow{
+      margin: 0 0 14px;
       color: var(--muted);
       font-size: 13px;
-      padding: 14px;
-      text-align:center;
-    }
-    .cardBody{ padding: 14px 14px 16px; }
-    .cardKicker{
-      font-size: 12px;
-      letter-spacing: .16em;
+      font-weight: 700;
+      letter-spacing: 0;
       text-transform: uppercase;
+    }
+    h1, h2, h3, p{ letter-spacing: 0; }
+    h1{
+      max-width: 850px;
+      margin: 0;
+      font-size: 64px;
+      line-height: 1.02;
+      font-weight: 780;
+    }
+    h2{
+      margin: 0;
+      font-size: 40px;
+      line-height: 1.12;
+      font-weight: 760;
+    }
+    h3{
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.25;
+      font-weight: 720;
+    }
+    .lead{
+      max-width: 760px;
+      margin: 16px 0 0;
       color: var(--muted);
-    }
-    .cardHead{
       font-size: 18px;
-      margin: 6px 0 6px;
-      letter-spacing: -0.01em;
+      line-height: 1.62;
     }
-    .cardText{
+    .hero .lead{
+      color: var(--muted);
+      font-size: 20px;
+    }
+    .ctaRow{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 11px 15px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .btn.primary{
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .btn.dark{
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .btn.ghost{
+      background: #fff;
+      border-color: rgba(0, 0, 0, .14);
+      color: var(--ink);
+    }
+    .btn:hover{
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+    .heroStoreTeaser{
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .storeBadge{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      border: 1px solid rgba(0, 0, 0, .12);
+      border-radius: 999px;
+      background: #f5f5f7;
+      color: var(--ink);
+      padding: 9px 13px;
+      font-size: 13px;
+      font-weight: 760;
+      white-space: nowrap;
+    }
+
+    .heroMeta{
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 34px;
+      max-width: 1020px;
+    }
+    .heroMetaItem{
+      border: 1px solid rgba(0, 0, 0, .08);
+      border-radius: var(--radius);
+      background: #f5f5f7;
+      padding: 14px;
+      min-height: 108px;
+    }
+    .heroMetaItem strong{
+      display: block;
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+    .heroMetaItem span{
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .section{
+      padding: 86px 0;
+    }
+    .section.alt{
+      background: var(--surface-alt);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .sectionHeader{
+      display: grid;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .sectionHeader .eyebrow{
+      color: var(--accent-dark);
+      margin: 0;
+    }
+
+    .featureGrid{
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .twoGrid{
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+    .card{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 18px;
+    }
+    .card p{
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.58;
+    }
+    .label{
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      margin-bottom: 10px;
+      border-radius: var(--radius);
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      padding: 5px 8px;
+      font-size: 12px;
+      font-weight: 760;
+    }
+    .label.warning{
+      background: var(--warning-soft);
+      color: var(--warning);
+    }
+
+    .downloadPanel{
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr);
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 26px;
+    }
+    .releaseBox{
+      border: 1px solid rgba(8, 123, 114, .22);
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 20px;
+    }
+    .releaseBox code{
+      display: block;
+      overflow-wrap: anywhere;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: var(--radius);
+      background: #f3f6f3;
+      color: #24302a;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    .storeNotice{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-top: 18px;
+      border: 1px solid rgba(0, 113, 227, .18);
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 18px;
+    }
+    .storeNotice p{
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.58;
+      font-size: 15px;
+    }
+    .storeBadges{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    .plainList{
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.72;
+    }
+    .plainList li + li{ margin-top: 4px; }
+
+    .steps{
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 24px;
+      counter-reset: setup;
+    }
+    .step{
+      position: relative;
+      border-top: 3px solid var(--accent);
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 16px;
+      min-height: 176px;
+      counter-increment: setup;
+    }
+    .step::before{
+      content: counter(setup, decimal-leading-zero);
+      display: block;
+      margin-bottom: 18px;
+      color: var(--accent-dark);
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .step p{
+      margin: 9px 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .skillFlow{
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .flowItem{
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      min-height: 158px;
+    }
+    .flowItem strong{
+      display: block;
+      color: var(--accent-dark);
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+    .flowItem p{
       margin: 0;
       color: var(--muted);
       line-height: 1.55;
       font-size: 14px;
     }
 
-    /* Callouts / tiles */
-    .callouts{
-      display:grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 16px;
+    .protocolGrid{
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 16px;
+      margin-top: 24px;
     }
-    .callout{
-      background: #fff;
-      border: 1px solid rgba(0,0,0,.10);
-      border-radius: 16px;
-      padding: 14px;
+    .endpointList{
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
     }
-    .calloutBig{
-      font-size: 20px;
-      letter-spacing: -0.02em;
-      margin: 0 0 6px;
-    }
-    .calloutSmall{
-      margin:0;
-      color: var(--muted);
+    .endpoint{
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f9fbf8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       font-size: 13px;
-      line-height: 1.5;
+    }
+    .method{
+      color: var(--accent-dark);
+      font-weight: 800;
     }
 
-    /* Use cases */
-    .useGrid{
-      display:grid;
+    .demoHero{
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr);
+      gap: 20px;
+      align-items: center;
+    }
+    .videoFrame{
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      border-radius: var(--radius);
+      background: #111;
+      display: block;
+    }
+    .demoGrid{
+      display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
-      margin-top: 12px;
+      margin-top: 24px;
     }
-    .useCard{
-      background:#fff;
-      border:1px solid rgba(0,0,0,.10);
-      border-radius: 18px;
+    .demoCard{
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .demoCard video{
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      display: block;
+      background: #101715;
+    }
+    .demoBody{
       padding: 14px;
     }
-    .useTitle{ font-weight: 700; margin: 0 0 6px; }
-    .useText{ margin:0; color: var(--muted); line-height: 1.6; font-size: 14px; }
-
-    /* Prompt chips */
-    .chips{
-      display:flex; flex-wrap:wrap; gap:10px;
-      margin-top: 12px;
-    }
-    .chip{
-      border: 1px solid rgba(0,0,0,.12);
-      background: rgba(255,255,255,.88);
-      border-radius: 999px;
-      padding: 10px 12px;
-      font-size: 13px;
-      color: #1d1d1f;
-      cursor: pointer;
-      user-select:none;
-    }
-    .chip:hover{ background: #fff; transform: translateY(-1px); }
-
-    /* Setup list */
-    .bullets{
-      margin: 10px 0 0;
-      padding-left: 18px;
+    .demoBody p{
+      margin: 7px 0 0;
       color: var(--muted);
-      line-height: 1.75;
-    }
-
-    /* FAQ (accordion) */
-    details{
-      background: #fff;
-      border: 1px solid rgba(0,0,0,.10);
-      border-radius: 16px;
-      padding: 12px 14px;
-    }
-    details + details{ margin-top: 10px; }
-    summary{
-      cursor:pointer;
-      font-weight: 650;
-      list-style:none;
-    }
-    summary::-webkit-details-marker{ display:none; }
-    details p{ margin: 10px 0 0; color: var(--muted); line-height: 1.65; }
-
-    /* Waitlist form */
-    .form{
-      background:#fff;
-      border: 1px solid rgba(0,0,0,.10);
-      border-radius: 20px;
-      padding: 18px;
-      max-width: 600px;
-    }
-    label{ display:block; font-size: 13px; color: var(--muted); margin: 12px 0 6px; }
-    input, select, textarea{
-      width:100%;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(0,0,0,.14);
+      line-height: 1.55;
       font-size: 14px;
-      outline: none;
     }
-    textarea{ min-height: 96px; resize: vertical; }
+
+    .statusGrid{
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 18px;
+      margin-top: 24px;
+    }
+    .statusCallout{
+      border-left: 4px solid var(--warning);
+      border-radius: var(--radius);
+      background: var(--warning-soft);
+      padding: 18px;
+    }
+    .statusCallout p{
+      margin: 10px 0 0;
+      color: #6b461b;
+      line-height: 1.58;
+    }
+
+    .form{
+      max-width: 620px;
+      margin-top: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 18px;
+    }
+    label{
+      display: block;
+      margin: 12px 0 6px;
+      color: #495047;
+      font-size: 13px;
+      font-weight: 650;
+    }
+    input, select, textarea{
+      width: 100%;
+      border: 1px solid rgba(20, 28, 22, .18);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      padding: 12px;
+      font: inherit;
+      font-size: 14px;
+    }
+    textarea{
+      min-height: 92px;
+      resize: vertical;
+    }
 
     .footer{
-      margin-top: 28px;
+      padding: 28px 0 44px;
       color: var(--muted);
       font-size: 12px;
-      line-height: 1.6;
+      line-height: 1.7;
+    }
+    .footer .wrap{
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
     }
 
-    @media (max-width: 860px){
-      .callouts{ grid-template-columns: 1fr; }
-      .useGrid{ grid-template-columns: 1fr; }
+    @media (max-width: 980px){
+      h1{ font-size: 48px; }
+      h2{ font-size: 34px; }
+      .heroMeta,
+      .featureGrid,
+      .steps,
+      .skillFlow,
+      .demoGrid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .downloadPanel,
+      .protocolGrid,
+      .demoHero,
+      .statusGrid{
+        grid-template-columns: 1fr;
+      }
+      .storeNotice{
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .storeBadges{
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 680px){
+      .wrap,
+      .topbarInner,
+      .heroContent{
+        width: min(100% - 32px, var(--max));
+      }
+      .topbarInner{
+        min-height: 78px;
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 0;
+      }
+      .nav{
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 2px;
+      }
+      .hero{
+        min-height: auto;
+      }
+      .heroContent{
+        padding: 70px 0 38px;
+      }
+      h1{ font-size: 38px; }
+      h2{ font-size: 29px; }
+      .hero .lead{ font-size: 18px; }
+      .section{ padding: 64px 0; }
+      .heroMeta,
+      .featureGrid,
+      .twoGrid,
+      .steps,
+      .skillFlow,
+      .demoGrid{
+        grid-template-columns: 1fr;
+      }
+      .step{
+        min-height: auto;
+      }
     }
   </style>
 </head>
 
 <body>
-  <!-- Sticky top nav (Waitlist link is OK; the form is still the last section) -->
-  <div class="topbar">
-    <div class="topbar-inner">
-      <a class="brandCol" href="/">
-        <div class="brand">ClawMobile</div>
-        <div class="tagline">An AI agent in your pocket.</div>
+  <header class="topbar">
+    <div class="topbarInner">
+      <a class="brandBlock" href="#top" aria-label="ClawMobile home">
+        <span class="brand">ClawMobile</span>
+        <span class="tagline">Phone-native AI agents</span>
       </a>
-      <div class="nav">
-        <a href="#highlights">Highlights</a>
-        <a href="#demo">Demo</a>
-        <!-- <a href="#usecases">Use cases</a> -->
-        <!-- <a href="#prompts">Prompts</a> -->
-        <!-- <a href="#setup">Setup</a> -->
-        <!-- <a href="#privacy">Privacy</a> -->
-        <!-- <a href="#faq">FAQ</a> -->
-        <a href="#waitlist">Waitlist</a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="#app">App</a>
+        <a href="#setup">Setup</a>
+        <a href="#skills">Skills</a>
+        <a href="#protocol">Protocol</a>
+        <a href="#demos">Demos</a>
+        <a href="#status">Status</a>
         <a href="https://github.com/ClawMobile/ClawMobile" target="_blank" rel="noopener noreferrer">GitHub</a>
-      </div>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <!-- HERO -->
-  <div class="wrap">
-    <section class="section" id="top">
-      <!-- <div class="eyebrow">ClawMobile — Closed beta</div> -->
-
-      <h1>ClawMobile <br/> An AI agent in your pocket.</h1>
-
-      <p class="lead">
-        ClawMobile turns your phone into a pocket-sized agent that goes beyond OpenClaw’s server‑style automation: it runs locally, drives the Android UI with semantic actions, and completes on‑device tasks by interacting with apps, settings, and system UI wherever you are.
-      </p>
-
-      <div class="callouts">
-        <div class="callout">
-          <p class="calloutBig">Local runtime</p>
-          <p class="calloutSmall">Runs fully on-device without requiring a remote control server.</p>
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="heroContent">
+        <p class="eyebrow">Public preview for real Android devices</p>
+        <h1 id="hero-title">Run a phone-native AI agent from Android.</h1>
+        <p class="lead">
+          ClawMobile pairs a native Android companion app with a Termux-hosted OpenClaw runtime, so tasks, generated skills, trusted-agent messaging, logs, and setup controls stay close to the device they operate.
+        </p>
+        <div class="ctaRow">
+          <a class="btn dark" href="https://github.com/ClawMobile/ClawMobile/releases/latest/download/ClawMobile-v0.1.2.apk" target="_blank" rel="noopener noreferrer">Download Android APK</a>
+          <a class="btn ghost" href="#demos">Watch demos</a>
+          <a class="btn ghost" href="https://github.com/ClawMobile/ClawMobile" target="_blank" rel="noopener noreferrer">View source</a>
         </div>
-        <div class="callout">
-          <p class="calloutBig">OpenClaw as orchestration layer</p>
-          <p class="calloutSmall">Reusable tools and skills plug into existing OpenClaw interfaces.</p>
+        <div class="heroStoreTeaser" aria-label="Store release preview">
+          <span>Coming soon to</span>
+          <span class="storeBadge">Google Play</span>
+          <span class="storeBadge">the App Store</span>
         </div>
-        <div class="callout">
-          <p class="calloutBig">Semantic UI control</p>
-          <p class="calloutSmall">Accessibility-driven actions and ADB, instead of fragile coordinate-based automation.</p>
-        </div>
-        <div class="callout">
-          <p class="calloutBig">Extensible control pipeline</p>
-          <p class="calloutSmall">Add tools or providers without rewriting the agent loop.</p>
-        </div>
-      </div>
-
-      <div class="ctaRow">
-        <a class="btn" href="#highlights">Get the highlights</a>
-        <a class="btn primary" href="#demo">Watch the demo</a>
-      </div>
-
-      <!-- <div class="fineprint">
-        One‑time setup required: Developer options + Wireless ADB (same Wi‑Fi).
-      </div> -->
-
-      <!-- <div class="bleed" style="margin-top:22px;">
-        <div class="bleedPlaceholder">
-          Optional hero loop (6–10s): chat bubble → spare phone starts moving
-        </div>
-      </div> -->
-    </section>
-  </div>
-
-  <!-- HIGHLIGHTS -->
-  <div class="section tint" id="highlights">
-    <div class="wrap">
-      <div class="railTitle">
-        <h2>Get the highlights.</h2>
-        <div class="muted" style="font-size:14px;">Scroll →</div>
-      </div>
-
-      <div class="rail">
-
-        <div class="card">
-          <div class="cardMedia">
-            <iframe width="250" height="400" src="https://www.youtube.com/embed/_-9RAgMhwas" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <div class="heroMeta" aria-label="Current ClawMobile preview highlights">
+          <div class="heroMetaItem">
+            <strong>Android companion</strong>
+            <span>Recommended first control surface for setup, tasks, skills, logs, and social contacts.</span>
           </div>
-          <div class="cardBody">
-            <div class="cardKicker">Smart Shopping</div>
-            <div class="cardHead">Auto-Find the Cheapest Ice Cream on Talabat</div>
-            <p class="cardText">Watch how automation scans three stores, compares ice cream prices, and adds the most affordable one to your cart—effortless savings in seconds!</p>
+          <div class="heroMetaItem">
+            <strong>Termux runtime</strong>
+            <span>OpenClaw, the local companion server, skills, artifacts, and logs still run inside Termux.</span>
           </div>
-        </div>
-
-        <div class="card">
-          <div class="cardMedia">
-            <iframe width="250" height="400" src="https://www.youtube.com/embed/qXxNgWw-b58" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <div class="heroMetaItem">
+            <strong>Generated skills</strong>
+            <span>Teach by demonstration, promote the trace, then reuse the workflow from natural language.</span>
           </div>
-          <div class="cardBody">
-            <div class="cardKicker">Navigation Made Easy</div>
-            <div class="cardHead">Auto-Route Home on Google Maps</div>
-            <p class="cardText">See how automation instantly opens Google Maps and starts navigation to your home address—no typing, no tapping, just hit the road</p>
+          <div class="heroMetaItem">
+            <strong>Runtime protocol v1</strong>
+            <span>Draft HTTP JSON contract for Android now and future iOS, desktop, cloud, or LAN runtimes.</span>
           </div>
-        </div>
-
-        <div class="card">
-          <div class="cardMedia">
-            <iframe width="250" height="400" src="https://www.youtube.com/embed/Q-9FjDCYFdQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-          <div class="cardBody">
-            <div class="cardKicker">Instant Search</div>
-            <div class="cardHead">Auto-Search in Chrome with One Tap</div>
-            <p class="cardText">See how automation opens Chrome, enters your query, and fetches results instantly—no typing, just searching.</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="cardMedia">
-            <iframe width="250" height="400" src="https://www.youtube.com/embed/g4HPLKTBkps" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-          <div class="cardBody">
-            <div class="cardKicker">Device Dashboard</div>
-            <div class="cardHead">One-Tap System Control</div>
-            <p class="cardText">Watch how automation pulls your phone's hardware specs and opens the calculator instantly—all your device tools, right when you need them.</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="cardMedia">
-            <iframe width="250" height="400" src="https://www.youtube.com/embed/ysna5JY6vU0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-          <div class="cardBody">
-            <div class="cardKicker">Smart Settings</div>
-            <div class="cardHead">Auto-Adjust System Settings Instantly</div>
-            <p class="cardText">See how automation checks and toggles Bluetooth—plus other key settings—without digging through menus. Perfect for quick setup changes.</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="cardMedia">
-            <iframe width="250" height="400" src="https://www.youtube.com/embed/z-Vqi6etUdI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-          <div class="cardBody">
-            <div class="cardKicker">Scripting Power</div>
-            <div class="cardHead">Automate Complex Tasks with Ease</div>
-            <p class="cardText">See how automation executes commands directly on your device—like generating a 2000-line text file with random 5-digit numbers (no 0 or 1, prefixed with "LIF"). Endless possibilities with just a tap.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- DEMO -->
-  <div class="wrap">
-    <section class="section" id="demo">
-      <h2>One message in. A phone in motion.</h2>
-      <p class="lead">
-        Prompt: <b>“Please open the YouTube app and search the MV of Ed Sheeran's Bad Habits.”</b><br/>
-        ClawMobile opens the app, searches results, selects, and starts playing — automatically.
-      </p>
-
-      <div class="bleed">
-        <!-- Replace with your real demo video -->
-        <!--
-        <video src="demo.mp4" controls playsinline muted style="width:100%;height:auto;display:block;"></video>
-        -->
-        <iframe class="demoVideo" src="https://www.youtube.com/embed/sHkphs_XgL4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      </div>
-
-      <!-- <div class="fineprint">Watch it happen on the device.</div> -->
-    </section>
-  </div>
-
-  <!-- CHAPTER: MAIN PHONE PERSONAL -->
-  <!-- <div class="section tint">
-    <div class="wrap">
-      <h2>Your main phone stays personal.<br/>Your spare phone does the work.</h2>
-      <p class="lead">
-        Your main phone has messages, photos, accounts, and notifications.
-        ClawMobile keeps automation on a dedicated entertainment device — controlled by chat.
-      </p>
-
-      <div class="callouts">
-        <div class="callout">
-          <p class="calloutBig">No app on your main phone</p>
-          <p class="calloutSmall">Chat from apps you already use — like Telegram or WhatsApp.</p>
-        </div>
-        <div class="callout">
-          <p class="calloutBig">A dedicated “fun phone”</p>
-          <p class="calloutSmall">A cleaner place for automation (fewer private apps and accounts).</p>
-        </div>
-        <div class="callout">
-          <p class="calloutBig">On‑screen execution</p>
-          <p class="calloutSmall">You can watch it run. Step‑by‑step view is planned.</p>
-        </div>
-      </div>
-
-      <div class="bleed" style="background:#fff; border-color:rgba(0,0,0,.08);">
-        <div class="bleedPlaceholder" style="color:var(--muted); background:linear-gradient(135deg, rgba(0,0,0,.05), rgba(0,0,0,.02));">
-          Optional visual: spare phone “entertainment station” setup
-        </div>
-      </div>
-    </div>
-  </div> -->
-
-  <!-- USE CASES -->
-  <!-- <div class="wrap">
-    <section class="section" id="usecases">
-      <h2>Made for everyday tasks.</h2>
-      <p class="lead">
-        Start with entertainment. Expand into simple utilities — like price checks — on a dedicated device.
-      </p>
-
-      <div class="useGrid">
-        <div class="useCard">
-          <p class="useTitle">Video</p>
-          <p class="useText"><b>“Play something now.”</b><br/>Open YouTube, search, pick a result, and start playing.</p>
-        </div>
-        <div class="useCard">
-          <p class="useTitle">Music</p>
-          <p class="useText"><b>“Start the soundtrack.”</b><br/>Open a music app and play a playlist you choose.</p>
-        </div>
-        <div class="useCard">
-          <p class="useTitle">Shopping (price check)</p>
-          <p class="useText"><b>“Compare prices before you buy.”</b><br/>Search a product and check prices across stores — hands‑free on a spare phone. <span class="muted">(beta)</span></p>
         </div>
       </div>
     </section>
-  </div> -->
 
-  <!-- PROMPTS -->
-  <!-- <div class="section tint" id="prompts">
-    <div class="wrap">
-      <h2>Prompts you’ll actually use.</h2>
-      <p class="lead">
-        Try these on a dedicated entertainment phone. Click to copy.
-      </p>
-
-      <div class="chips">
-        <div class="chip">Open YouTube and play a video.</div>
-        <div class="chip">Open YouTube, search “movie trailers”, and play the first result.</div>
-        <div class="chip">Search “lo‑fi beats” on YouTube and start playing.</div>
-        <div class="chip">Play something relaxing on YouTube.</div>
-        <div class="chip">Open a music app and play my playlist.</div>
-        <div class="chip">Play background music for studying.</div>
-        <div class="chip">Compare prices for “Nintendo Switch” on Store A and Store B. (beta)</div>
-        <div class="chip">Open a shopping app and search for “USB‑C cable”. (beta)</div>
-        <div class="chip">Start bedtime routine: lower brightness and play sleep sounds. (planned)</div>
-      </div>
-
-      <div class="fineprint">
-        Tip: Keep prompts simple and specific. More controls are coming during beta.
-      </div>
-
-      <div class="bleed" style="background:#fff; border-color:rgba(0,0,0,.08);">
-        <div class="bleedPlaceholder" style="color:var(--muted); background:linear-gradient(135deg, rgba(0,0,0,.05), rgba(0,0,0,.02));">
-          Optional visual: a strip of screenshots “Prompt → phone actions”
-        </div>
-      </div>
-    </div>
-  </div> -->
-
-  <!-- SETUP -->
-  <!-- <div class="wrap">
-    <section class="section" id="setup">
-      <h2>Set it up once. Then just chat.</h2>
-      <p class="lead">
-        ClawMobile requires a one‑time setup on the spare Android phone for reliable control.
-        It runs over <b>Wireless ADB</b> on the <b>same Wi‑Fi</b>.
-      </p>
-
-      <ul class="bullets">
-        <li>Enable <b>Developer options</b> on the spare phone</li>
-        <li>Connect via <b>Wireless ADB</b></li>
-        <li>Keep both phones on the <b>same Wi‑Fi</b></li>
-      </ul>
-
-      <div class="fineprint">
-        After setup, it feels like messaging a friend.
-      </div>
-    </section>
-  </div> -->
-
-  <!-- PRIVACY -->
-  <!-- <div class="section tint" id="privacy">
-    <div class="wrap">
-      <h2>Cloud‑powered planning.<br/>Built for a dedicated device.</h2>
-      <p class="lead">
-        ClawMobile processes your instruction in the cloud to plan actions.
-        To complete tasks, it may also process relevant on‑screen context.
-        We recommend using a dedicated entertainment phone with minimal sensitive data.
-      </p>
-
-      <div class="callouts">
-        <div class="callout">
-          <p class="calloutBig">Dedicated‑device approach</p>
-          <p class="calloutSmall">Keep private apps and accounts off the automation phone.</p>
-        </div>
-        <div class="callout">
-          <p class="calloutBig">Clear control (planned)</p>
-          <p class="calloutSmall">Instant pause/stop and step visibility are in progress.</p>
-        </div>
-        <div class="callout">
-          <p class="calloutBig">Waitlist privacy</p>
-          <p class="calloutSmall">We only collect your email and a few preference answers.</p>
-        </div>
-      </div>
-
-      <div class="fineprint">
-        Responsible use: use ClawMobile only on devices you own and in ways that respect app terms and policies.
-      </div>
-    </div>
-  </div> -->
-
-  <!-- FAQ -->
-  <!-- <div class="wrap">
-    <section class="section" id="faq">
-      <h2>FAQ</h2>
-      <p class="lead">Short answers, upfront. More details in closed beta.</p>
-
-      <details>
-        <summary>Do I need to install anything on my main phone?</summary>
-        <p>No. You chat from apps you already use. Install ClawMobile only on the spare Android phone.</p>
-      </details>
-
-      <details>
-        <summary>What does setup require?</summary>
-        <p>A one‑time setup on the spare phone: Developer options + Wireless ADB. Both phones need the same Wi‑Fi.</p>
-      </details>
-
-      <details>
-        <summary>Is ClawMobile Android‑only?</summary>
-        <p>Yes, during the closed beta.</p>
-      </details>
-
-      <details>
-        <summary>Can I save commands and run them later?</summary>
-        <p>Yes. Saved commands and schedules are available.</p>
-      </details>
-
-      <details>
-        <summary>What if something fails mid‑task?</summary>
-        <p>Auto‑retry is available to improve reliability on common flows.</p>
-      </details>
-
-      <details>
-        <summary>Can I stop it instantly?</summary>
-        <p>Instant pause/stop is planned. We’re building it now.</p>
-      </details>
-
-      <details>
-        <summary>Does it support voice?</summary>
-        <p>Voice control is planned. Waitlist members will get early updates.</p>
-      </details>
-    </section>
-  </div> -->
-
-  <!-- WAITLIST (LAST) -->
-  <div class="wrap">
-    <section class="section" id="waitlist">
-      <div class="eyebrow">Closed beta</div>
-      <h2>Get early access.</h2>
-      <p class="lead">
-        Join the waitlist for beta invites, updates, and the first look at voice control (coming soon).
-      </p>
-
-      <div class="form">
-        <!-- Replace action with your real Formspree endpoint -->
-        <form id="waitlistForm" method="POST" action="https://formspree.io/f/xzdalpej">
-          <input type="hidden" name="_subject" value="New ClawMobile waitlist signup" />
-          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true" />
-          <label>Email (required)</label>
-          <input name="email" type="email" required placeholder="you@example.com" />
-
-          <label>Which chat app would you like to use?</label>
-          <select name="chat_app">
-            <option value="">Select</option>
-            <option>Telegram</option>
-            <option>WhatsApp</option>
-            <option>Other</option>
-          </select>
-
-          <label>Do you have a spare Android phone?</label>
-          <select name="spare_android">
-            <option value="">Select</option>
-            <option>Yes</option>
-            <option>Not yet</option>
-          </select>
-
-          <label>Setup comfort level</label>
-          <select name="setup_level">
-            <option value="">Select</option>
-            <option>I can follow a step‑by‑step guide</option>
-            <option>I prefer to install it as an application</option>
-          </select>
-
-          <label>What would you automate first?</label>
-          <select name="first_use_case">
-            <option value="">Select</option>
-            <option>Video (YouTube)</option>
-            <option>Music</option>
-            <option>Price check (shopping)</option>
-            <option>Other</option>
-          </select>
-
-          <label>Anything you’d love it to do? (optional)</label>
-          <textarea name="wishlist" placeholder='Example: "Search for a product and open the best deal."'></textarea>
-
-          <div style="margin-top:12px;">
-            <button class="btn primary" type="submit" style="width:100%; border-radius:14px; padding:12px 14px;">
-              Join the waitlist
-            </button>
-          </div>
-
-          <p class="fineprint" style="margin:10px 0 0;">
-            We’ll only email you about early access and product updates. Unsubscribe anytime.
+    <section class="section" id="overview">
+      <div class="wrap">
+        <div class="sectionHeader">
+          <p class="eyebrow">Current package</p>
+          <h2>One companion app. One local runtime. One OpenClaw workspace.</h2>
+          <p class="lead">
+            The public-preview runtime includes the installer, OpenClaw mobile plugin, optional OCR support, ADB-backed UI tools, and the trace-to-skill workflow. The Android app is the daily control shell; Termux remains the source of truth.
           </p>
-          <p id="waitlistStatus" class="fineprint" style="margin:8px 0 0;" aria-live="polite"></p>
-        </form>
-      </div>
-
-      <div class="footer">
-        <!-- © 2026 ClawMobile · Contact: hongchao.du@mbzuai.ac.ae · Privacy Policy<br/> -->
-         © 2026 ClawMobile · <a href="https://github.com/ClawMobile/ClawMobile" target="_blank" rel="noopener noreferrer">GitHub</a> · Privacy Policy<br/>
-        Telegram and WhatsApp are third‑party services. No affiliation or endorsement is implied.<br/>
-        Features marked “planned” may change during beta.
+        </div>
+        <div class="featureGrid">
+          <article class="card">
+            <span class="label">Control</span>
+            <h3>Tasks from a native UI</h3>
+            <p>Send requests, follow long-running work, receive task completion notifications, and inspect runtime status without living in a terminal.</p>
+          </article>
+          <article class="card">
+            <span class="label">Runtime</span>
+            <h3>OpenClaw in Termux</h3>
+            <p>ClawMobile installs and maintains OpenClaw, the companion server, package dependencies, generated skills, logs, and runtime state locally.</p>
+          </article>
+          <article class="card">
+            <span class="label">Device control</span>
+            <h3>ADB-backed UI tools</h3>
+            <p>ADB enables richer phone-control capabilities through authorized Android developer options, USB, or wireless connections.</p>
+          </article>
+          <article class="card">
+            <span class="label">Sharing</span>
+            <h3>Trusted contacts</h3>
+            <p>Create an Agent ID, exchange messages with trusted ClawMobile devices, and share generated skills for review and import.</p>
+          </article>
+        </div>
       </div>
     </section>
-  </div>
+
+    <section class="section alt" id="app">
+      <div class="wrap">
+        <div class="sectionHeader">
+          <p class="eyebrow">Android companion app</p>
+          <h2>Install the APK, then let the app guide Termux setup.</h2>
+          <p class="lead">
+            The companion app does not replace Termux. It uses SSH for setup and maintenance, then talks to the local companion server for tasks, skills, status, logs, and trusted-agent messaging.
+          </p>
+        </div>
+
+        <div class="downloadPanel">
+          <div class="releaseBox">
+            <span class="label">Latest documented release</span>
+            <h3>ClawMobile-v0.1.2.apk</h3>
+            <p class="lead">
+              Download the release-signed APK from the public ClawMobile release page. If you installed an earlier debug-signed test APK, uninstall it before installing this release.
+            </p>
+            <div class="ctaRow">
+              <a class="btn primary" href="https://github.com/ClawMobile/ClawMobile/releases/latest/download/ClawMobile-v0.1.2.apk" target="_blank" rel="noopener noreferrer">Download APK</a>
+              <a class="btn" href="https://github.com/ClawMobile/ClawMobile/releases/latest" target="_blank" rel="noopener noreferrer">Release page</a>
+            </div>
+            <code>SHA-256: 772f6967ea9e489ae58963abffdea01991d3678ff578f5ef24230519d9783547</code>
+          </div>
+
+          <div class="card">
+            <span class="label">Inside Termux</span>
+            <h3>What still runs locally</h3>
+            <ul class="plainList">
+              <li>OpenClaw gateway and ClawMobile runtime</li>
+              <li>Local companion HTTP server</li>
+              <li>Package installs and setup scripts</li>
+              <li>Workspace skills, artifacts, logs, and runtime state</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="storeNotice">
+          <div>
+            <span class="label">Store launch preview</span>
+            <h3>Coming soon to Google Play and the App Store.</h3>
+            <p>The GitHub release APK is the current public-preview install path while mobile store listings are being prepared.</p>
+          </div>
+          <div class="storeBadges" aria-label="Planned mobile store listings">
+            <span class="storeBadge">Google Play</span>
+            <span class="storeBadge">the App Store</span>
+          </div>
+        </div>
+
+        <div class="twoGrid" style="margin-top:18px;">
+          <article class="card">
+            <span class="label">App surfaces</span>
+            <h3>What the companion adds</h3>
+            <ul class="plainList">
+              <li>Guided Termux setup from a native Android screen</li>
+              <li>Status checks for SSH, companion server, OpenClaw, ADB, model key, and workspace skills</li>
+              <li>Task chat, skills browser, task notifications, social contacts, and debug logs</li>
+            </ul>
+          </article>
+          <article class="card">
+            <span class="label">Local channels</span>
+            <h3>How it connects</h3>
+            <ul class="plainList">
+              <li>SSH to Termux for setup, maintenance, and runtime start commands</li>
+              <li>Local HTTP to the companion server for daily app interactions</li>
+              <li>The Android app controls and observes the local runtime; it is not the runtime itself</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="setup">
+      <div class="wrap">
+        <div class="sectionHeader">
+          <p class="eyebrow">Recommended setup flow</p>
+          <h2>Start with Termux, then operate from the app.</h2>
+          <p class="lead">
+            ADB is optional, but it unlocks richer phone-control capabilities. Follow the current ADB authorization flow in the main setup guide when you need UI automation.
+          </p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <h3>Install Termux</h3>
+            <p>Use F-Droid or the official Termux GitHub releases for the Android runtime environment.</p>
+          </article>
+          <article class="step">
+            <h3>Run SSH setup</h3>
+            <p>Use the commands shown in the companion app to prepare local SSH access into Termux.</p>
+          </article>
+          <article class="step">
+            <h3>Pair the app</h3>
+            <p>Connect using the local SSH host, port, and username so the app can manage setup.</p>
+          </article>
+          <article class="step">
+            <h3>Run setup</h3>
+            <p>Let the app install and maintain the ClawMobile runtime inside Termux.</p>
+          </article>
+          <article class="step">
+            <h3>Start ClawMobile</h3>
+            <p>Use Tasks, Skills, Social, status, and logs from the Android companion app.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="skills">
+      <div class="wrap">
+        <div class="sectionHeader">
+          <p class="eyebrow">Generated skills preview</p>
+          <h2>Teach the phone by doing the task once.</h2>
+          <p class="lead">
+            ClawMobile records a demonstration, turns the trace into a reusable OpenClaw skill, and can run that skill later from a natural-language request. The goal is durable local evidence, not hard-coded app scripts.
+          </p>
+        </div>
+
+        <div class="skillFlow" aria-label="Generated skill workflow">
+          <article class="flowItem">
+            <strong>Record</strong>
+            <p>Perform the task once on the phone from the target app and starting state.</p>
+          </article>
+          <article class="flowItem">
+            <strong>Capture</strong>
+            <p>Collect touch events, screenshots, app state, UI evidence, and values that should become parameters.</p>
+          </article>
+          <article class="flowItem">
+            <strong>Generate</strong>
+            <p>Create a parameterized skill candidate with recovery hints and reusable action structure.</p>
+          </article>
+          <article class="flowItem">
+            <strong>Promote</strong>
+            <p>Move the candidate into the OpenClaw workspace once it is ready to reuse.</p>
+          </article>
+          <article class="flowItem">
+            <strong>Improve</strong>
+            <p>Attach execution feedback or additional demos when layouts, devices, or list states vary.</p>
+          </article>
+        </div>
+
+        <div class="statusCallout" style="margin-top:18px;">
+          <span class="label warning">Preview reliability</span>
+          <h3>Generated skills are useful today, but they are still preview software.</h3>
+          <p>
+            They work best on the same device, app version, and starting state used for the demonstration. Fast paths and batch execution are experimental accelerators for stable steps, not a replacement for normal UI recovery.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="protocol">
+      <div class="wrap">
+        <div class="sectionHeader">
+          <p class="eyebrow">Runtime protocol v1</p>
+          <h2>A draft shared contract for multiple runtimes.</h2>
+          <p class="lead">
+            The v1 protocol gives clients a stable HTTP JSON task API and capability description. Backends can differ by platform while clients rely on the same core health, capability, run creation, run list, and run status surface.
+          </p>
+        </div>
+
+        <div class="protocolGrid">
+          <article class="card">
+            <span class="label">Required endpoints</span>
+            <h3>Small common task API</h3>
+            <div class="endpointList" aria-label="Required v1 runtime endpoints">
+              <div class="endpoint"><span class="method">GET</span><span>/v1/health</span></div>
+              <div class="endpoint"><span class="method">GET</span><span>/v1/capabilities</span></div>
+              <div class="endpoint"><span class="method">POST</span><span>/v1/runs</span></div>
+              <div class="endpoint"><span class="method">GET</span><span>/v1/runs?limit=100</span></div>
+              <div class="endpoint"><span class="method">GET</span><span>/v1/runs/{runId}</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <span class="label">Compatibility model</span>
+            <h3>Capabilities decide what clients show</h3>
+            <ul class="plainList">
+              <li>HTTP JSON is the baseline transport; WebSocket events are optional.</li>
+              <li>Clients can poll run status when streaming is unavailable.</li>
+              <li>Capability discovery advertises available tools, feature states, extensions, risk, and approvals.</li>
+              <li>Remote LAN, Tailscale, desktop, and cloud runtimes should require explicit pairing tokens.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="demos">
+      <div class="wrap">
+        <div class="demoHero">
+          <iframe class="videoFrame" src="https://www.youtube.com/embed/sHkphs_XgL4" title="ClawMobile YouTube task demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <div>
+            <p class="eyebrow">Demo gallery</p>
+            <h2>One request in. The phone moves.</h2>
+            <p class="lead">
+              The gallery includes command-channel demos, generated-skill reuse, hardware and system checks, browser search, maps routing, shopping comparison, and script execution.
+            </p>
+            <div class="ctaRow">
+              <a class="btn primary" href="https://github.com/ClawMobile/ClawMobile/blob/main/docs/demos.md" target="_blank" rel="noopener noreferrer">Open demo docs</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="demoGrid">
+          <article class="demoCard">
+            <video src="https://github.com/user-attachments/assets/7fbeb919-b5fa-48f3-aacb-c64f0132a909" controls preload="metadata"></video>
+            <div class="demoBody">
+              <h3>Generated Google Keep skill</h3>
+              <p>Record a phone workflow once, promote it as a generated OpenClaw skill, then reuse it from a request.</p>
+            </div>
+          </article>
+          <article class="demoCard">
+            <video src="https://github.com/user-attachments/assets/98f4eb0c-57a4-4ee6-aa18-06b7b721e41c" controls preload="metadata"></video>
+            <div class="demoBody">
+              <h3>Hardware demo</h3>
+              <p>Inspect device information and runtime health from the phone-control surface.</p>
+            </div>
+          </article>
+          <article class="demoCard">
+            <video src="https://github.com/user-attachments/assets/56ea6594-4cca-4e5c-9421-6ee195ac608b" controls preload="metadata"></video>
+            <div class="demoBody">
+              <h3>System demo</h3>
+              <p>Exercise Android system-level controls through the local runtime.</p>
+            </div>
+          </article>
+          <article class="demoCard">
+            <video src="https://github.com/user-attachments/assets/3d04f10e-c64e-4298-a78e-d2e3c3d106f3" controls preload="metadata"></video>
+            <div class="demoBody">
+              <h3>Script demo</h3>
+              <p>Execute repeatable local actions and inspect the result from the device workflow.</p>
+            </div>
+          </article>
+          <article class="demoCard">
+            <video src="https://github.com/user-attachments/assets/5a54672b-86fe-4f79-aa05-063a4e12453d" controls preload="metadata"></video>
+            <div class="demoBody">
+              <h3>Chrome demo</h3>
+              <p>Open a browser flow, search, and recover through real mobile UI state.</p>
+            </div>
+          </article>
+          <article class="demoCard">
+            <video src="https://github.com/user-attachments/assets/778b64e7-d524-433d-a81c-c3b13cc0799d" controls preload="metadata"></video>
+            <div class="demoBody">
+              <h3>Maps demo</h3>
+              <p>Use app automation for navigation-oriented tasks from a simple instruction.</p>
+            </div>
+          </article>
+          <article class="demoCard">
+            <video src="https://github.com/user-attachments/assets/afe9d09d-4f61-4243-95d0-5ff14699dd66" controls preload="metadata"></video>
+            <div class="demoBody">
+              <h3>Shopping comparison</h3>
+              <p>Compare mobile app results across stores and act on the best candidate.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="status">
+      <div class="wrap">
+        <div class="sectionHeader">
+          <p class="eyebrow">Status and limitations</p>
+          <h2>Public preview means real devices, real setup, and clear boundaries.</h2>
+          <p class="lead">
+            ClawMobile is available for real Android devices, but generated skills, ADB-backed control, and screenshot-heavy verification still have practical constraints during preview.
+          </p>
+        </div>
+
+        <div class="statusGrid">
+          <article class="statusCallout">
+            <span class="label warning">Known limits</span>
+            <h3>ADB, device state, and network conditions matter.</h3>
+            <p>
+              ADB-backed UI control requires Android developer options, USB or wireless ADB, and an authorized device connection. Termux mirrors can be stale or unreachable, and screenshot-heavy verification may be slower on phone hardware than desktop.
+            </p>
+          </article>
+          <article class="card">
+            <span class="label">Release hygiene</span>
+            <h3>The active path is Android companion plus Termux runtime.</h3>
+            <ul class="plainList">
+              <li>Generated skills should first be tested on the same device, app version, and starting app state used for the demo.</li>
+              <li>Cross-device, cross-layout, and dynamic-list workflows may need additional demonstrations.</li>
+              <li>The older DroidRun/MobileRun backend is archived on the legacy branch and is not the active install path.</li>
+              <li>Use ClawMobile only on devices you own and in ways that respect app terms and policies.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="updates">
+      <div class="wrap">
+        <div class="sectionHeader">
+          <p class="eyebrow">Stay current</p>
+          <h2>Get release updates and preview notes.</h2>
+          <p class="lead">
+            Follow the GitHub repository for source, issues, releases, and documentation. You can also leave an email for occasional ClawMobile updates.
+          </p>
+          <div class="ctaRow">
+            <a class="btn primary" href="https://github.com/ClawMobile/ClawMobile/releases/latest" target="_blank" rel="noopener noreferrer">Latest release</a>
+            <a class="btn" href="https://github.com/ClawMobile/ClawMobile/blob/main/docs/status-and-limitations.md" target="_blank" rel="noopener noreferrer">Status docs</a>
+            <a class="btn" href="https://github.com/ClawMobile/ClawMobile/blob/main/docs/runtime-protocol-v1.md" target="_blank" rel="noopener noreferrer">Protocol docs</a>
+            <a class="btn" href="/privacy">Privacy</a>
+          </div>
+        </div>
+
+        <div class="form">
+          <form id="updatesForm" method="POST" action="https://formspree.io/f/xzdalpej">
+            <input type="hidden" name="_subject" value="New ClawMobile update signup" />
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true" />
+
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required placeholder="you@example.com" />
+
+            <label for="interest">What are you trying first?</label>
+            <select id="interest" name="interest">
+              <option value="">Select</option>
+              <option>Android companion setup</option>
+              <option>Generated skills</option>
+              <option>Trusted-agent messaging</option>
+              <option>Runtime protocol integration</option>
+              <option>Other</option>
+            </select>
+
+            <label for="device">Do you have a spare Android device?</label>
+            <select id="device" name="spare_android">
+              <option value="">Select</option>
+              <option>Yes</option>
+              <option>Not yet</option>
+            </select>
+
+            <label for="wishlist">Anything you want ClawMobile to automate?</label>
+            <textarea id="wishlist" name="wishlist" placeholder="Example: record a repeatable workflow and run it later as a skill."></textarea>
+
+            <div style="margin-top:12px;">
+              <button class="btn primary" type="submit" style="width:100%;">Get updates</button>
+            </div>
+
+            <p id="updatesStatus" class="lead" style="font-size:13px;margin:10px 0 0;" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      © 2026 ClawMobile · <a href="/privacy">Privacy</a> · <a href="https://github.com/ClawMobile/ClawMobile" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://github.com/ClawMobile/ClawMobile/releases/latest" target="_blank" rel="noopener noreferrer">Releases</a><br />
+      Android, Telegram, WhatsApp, GitHub, and other named services are third-party services. No affiliation or endorsement is implied. Preview features and protocol details may change.
+    </div>
+  </footer>
 
   <script>
-    // Click-to-copy for prompt chips
     (function(){
-      const chips = document.querySelectorAll('.chip');
-      chips.forEach(chip => {
-        chip.addEventListener('click', async () => {
-          const text = chip.textContent.trim();
-          try{
-            await navigator.clipboard.writeText(text);
-            const old = chip.textContent;
-            chip.textContent = 'Copied ✓';
-            setTimeout(()=> chip.textContent = old, 900);
-          }catch(e){
-            // Clipboard may be blocked; no-op.
-          }
-        });
-      });
-    })();
-
-    // Formspree async submit for waitlist
-    (function(){
-      const form = document.getElementById('waitlistForm');
+      const form = document.getElementById('updatesForm');
       if(!form){ return; }
 
-      const status = document.getElementById('waitlistStatus');
+      const status = document.getElementById('updatesStatus');
       const submitBtn = form.querySelector('button[type="submit"]');
       const endpoint = form.getAttribute('action') || '';
 
@@ -788,7 +1072,7 @@
 
           if(response.ok){
             form.reset();
-            if(status){ status.textContent = 'Thanks. You are on the waitlist.'; }
+            if(status){ status.textContent = 'Thanks. You are on the update list.'; }
           }else{
             if(status){ status.textContent = 'Submission failed. Please try again.'; }
           }

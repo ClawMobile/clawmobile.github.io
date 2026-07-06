@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Privacy Policy - ClawMobile</title>
+  <meta name="description" content="ClawMobile Privacy Policy for the Android app, iOS app, and related ClawMobile web pages." />
+  <link rel="canonical" href="https://clawmobile.ae/privacy" />
+
+  <style>
+    :root{
+      --bg: #ffffff;
+      --ink: #1d1d1f;
+      --muted: #6e6e73;
+      --surface: #ffffff;
+      --surface-alt: #f5f5f7;
+      --line: rgba(0, 0, 0, .10);
+      --accent: #0071e3;
+      --accent-dark: #0066cc;
+      --accent-soft: #e8f2ff;
+      --warning: #9b5b14;
+      --warning-soft: #fff1dc;
+      --radius: 18px;
+      --max: 1060px;
+    }
+
+    *{ box-sizing: border-box; }
+    html{ scroll-behavior: smooth; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+    .wrap{
+      width: min(var(--max), calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(0, 0, 0, .06);
+      background: rgba(255, 255, 255, .78);
+      backdrop-filter: blur(12px);
+    }
+    .topbarInner{
+      width: min(var(--max), calc(100% - 48px));
+      min-height: 64px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brandBlock{
+      display: grid;
+      gap: 2px;
+      min-width: max-content;
+    }
+    .brandBlock:hover{ text-decoration: none; }
+    .brand{
+      font-size: 16px;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+    .tagline{
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0;
+    }
+    .nav{
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 4px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .nav a{
+      padding: 8px 10px;
+      border-radius: var(--radius);
+    }
+    .nav a:hover{
+      background: rgba(0, 0, 0, .04);
+      text-decoration: none;
+    }
+
+    .hero{
+      padding: 88px 0 56px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+    .eyebrow{
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 760;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    h1, h2, h3, p{ letter-spacing: 0; }
+    h1{
+      max-width: 860px;
+      margin: 0;
+      font-size: 56px;
+      line-height: 1.04;
+      font-weight: 790;
+    }
+    h2{
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.18;
+      font-weight: 760;
+    }
+    h3{
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.28;
+      font-weight: 730;
+    }
+    .lead{
+      max-width: 820px;
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.64;
+    }
+    .meta{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .pill{
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface-alt);
+      padding: 8px 12px;
+    }
+    .section{
+      padding: 54px 0;
+      background: var(--surface-alt);
+    }
+    .contentGrid{
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 26px;
+      align-items: start;
+    }
+    .toc{
+      position: sticky;
+      top: 88px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 16px;
+    }
+    .toc strong{
+      display: block;
+      margin-bottom: 8px;
+      color: var(--ink);
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+    .toc a{
+      display: block;
+      padding: 7px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .policyStack{
+      display: grid;
+      gap: 16px;
+    }
+    .card{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 22px;
+    }
+    .card p{
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.68;
+    }
+    .card ul{
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .card li + li{ margin-top: 6px; }
+    .notice{
+      border-left: 4px solid var(--accent);
+      background: #fff;
+    }
+    .warning{
+      border-left: 4px solid var(--warning);
+      background: var(--warning-soft);
+    }
+    .warning p,
+    .warning li{
+      color: #68461e;
+    }
+    .label{
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      margin-bottom: 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 760;
+    }
+    .btnRow{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 11px 15px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .btn.primary{
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .btn:hover{
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+    .footer{
+      padding: 28px 0 44px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+      background: #fff;
+    }
+    .footer .wrap{
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+    }
+
+    @media (max-width: 820px){
+      .topbarInner{
+        min-height: 78px;
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 0;
+      }
+      .nav{
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 2px;
+      }
+      .contentGrid{
+        grid-template-columns: 1fr;
+      }
+      .toc{
+        position: static;
+      }
+      h1{ font-size: 38px; }
+      h2{ font-size: 26px; }
+      .wrap,
+      .topbarInner{
+        width: min(100% - 32px, var(--max));
+      }
+      .hero{
+        padding: 64px 0 42px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbarInner">
+      <a class="brandBlock" href="/" aria-label="ClawMobile home">
+        <span class="brand">ClawMobile</span>
+        <span class="tagline">Phone-native AI agents</span>
+      </a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/#app">App</a>
+        <a href="/#skills">Skills</a>
+        <a href="/#protocol">Protocol</a>
+        <a href="https://github.com/ClawMobile/ClawMobile" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Privacy Policy</p>
+        <h1>ClawMobile Privacy Policy</h1>
+        <p class="lead">
+          This Privacy Policy explains how ClawMobile handles information when you use the ClawMobile Android app, ClawMobile iOS app, and related ClawMobile web pages that link to this policy.
+        </p>
+        <div class="meta">
+          <span class="pill">Last updated: July 6, 2026</span>
+          <span class="pill">Android app</span>
+          <span class="pill">iOS app</span>
+          <span class="pill">ClawMobile web pages</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap contentGrid">
+        <aside class="toc" aria-label="Privacy policy sections">
+          <strong>Policy sections</strong>
+          <a href="#summary">Short version</a>
+          <a href="#information">Information we handle</a>
+          <a href="#device">Stored on device</a>
+          <a href="#providers">Model providers</a>
+          <a href="#android">Android features</a>
+          <a href="#ios">iOS features</a>
+          <a href="#social">Social and relays</a>
+          <a href="#network">Web and network</a>
+          <a href="#sharing">Sharing</a>
+          <a href="#retention">Retention</a>
+          <a href="#choices">Your choices</a>
+          <a href="#children">Children</a>
+          <a href="#security">Security</a>
+          <a href="#future">Future services</a>
+          <a href="#changes">Changes</a>
+          <a href="#contact">Contact</a>
+        </aside>
+
+        <div class="policyStack">
+          <article class="card notice" id="summary">
+            <span class="label">Short version</span>
+            <h2>ClawMobile is local-first and bring-your-own-provider.</h2>
+            <p>
+              Most ClawMobile app data is stored on your device. Real AI responses require you to configure a model provider or compatible endpoint, and task content may be sent to that provider when you run a model-backed task.
+            </p>
+            <p>
+              In the current Android and iOS builds, ClawMobile does not provide a ClawMobile account, subscription, payment processor, advertising SDK, third-party analytics SDK, third-party crash reporting SDK, or ClawMobile-hosted model router.
+            </p>
+            <p>
+              ClawMobile does not sell personal information.
+            </p>
+          </article>
+
+          <article class="card" id="information">
+            <span class="label">Information we handle</span>
+            <h2>Information you provide or choose to use in the app</h2>
+            <p>Depending on the platform and features you use, ClawMobile may handle:</p>
+            <ul>
+              <li>task prompts, chat messages, task results, and task history;</li>
+              <li>shared text, links, images, PDFs, and files imported through Android share intents, the iOS Share Extension, file pickers, or system handoffs;</li>
+              <li>voice input after you grant microphone and speech recognition access on iOS;</li>
+              <li>images, screenshots, OCR text, extracted text, selected file metadata, and image-understanding content used in tasks;</li>
+              <li>memory entries you create or ask the agent to save;</li>
+              <li>artifacts, reusable task drafts, skill drafts, generated skill guidance, demo recordings, fast paths, skill metadata, and skill run history;</li>
+              <li>model provider settings such as provider name, model name, base URL, token limits, and API keys;</li>
+              <li>optional Android Termux/OpenClaw setup settings such as SSH host, port, username, install directory, repository branch, companion port, gateway port, and setup logs;</li>
+              <li>optional Android SSH password, SSH private key, Telegram bot token, and Telegram user ID when you choose to configure those features;</li>
+              <li>optional Social settings such as Nostr identity, relays, trusted contacts, messages, and imported or shared packages.</li>
+            </ul>
+          </article>
+
+          <article class="card" id="device">
+            <span class="label">On-device storage</span>
+            <h2>Most app data is stored locally on your device.</h2>
+            <p>
+              ClawMobile stores local app data on your device, including task and conversation history, run timelines, tool-call summaries, token usage, local runtime logs, memory entries, memory search state, artifacts, imported shared content, skills, app settings, backend selection, permission choices, trusted contacts, Social conversations, local runtime state, and local provider settings.
+            </p>
+            <p>
+              On iOS, model API keys and Nostr private key material are stored in the iOS Keychain. On Android, model API keys, SSH passwords, SSH private keys, and Telegram bot tokens are stored in app-private preferences after Android Keystore-backed AES/GCM encryption. Other Android runtime data is stored in app-private storage.
+            </p>
+            <p>
+              This information remains on your device unless you delete it, clear app data, uninstall the app, share it, send it to a configured model provider, sync it through a user-configured relay or endpoint, copy it to another app, or use a feature that intentionally exports or hands off the content. Android backup behavior may depend on your device settings, operating system, and Google/Android backup configuration.
+            </p>
+          </article>
+
+          <article class="card" id="providers">
+            <span class="label">Model providers</span>
+            <h2>Information sent to model providers</h2>
+            <p>
+              When you configure an external model provider or compatible endpoint and run a model-backed task, ClawMobile may send the information needed to complete that task to the provider you selected. This may include prompts, relevant conversation context, selected memory context, tool names, tool schemas, tool observations, tool results, error messages, shared text, URLs, images, PDFs, files, OCR text, screenshots, generated artifacts, generated skill drafts, demo summaries, fast-path descriptions, provider name, model name, base URL, token limits, request timing, and related routing details.
+            </p>
+            <p>
+              ClawMobile does not send every local item by default. The app selects context that is relevant to the task you start.
+            </p>
+            <p>
+              You control which provider or endpoint is configured. ClawMobile can connect to user-configured providers and endpoints such as OpenAI, Claude/Anthropic, OpenRouter, DeepSeek, Groq, Mistral, Together, Ollama, LM Studio, and custom OpenAI-compatible endpoints. Provider availability, retention, pricing, and data handling are controlled by the provider you choose. Review your provider's terms and privacy practices before sending sensitive information.
+            </p>
+          </article>
+
+          <article class="card" id="android">
+            <span class="label">Android app</span>
+            <h2>Android app-local runtime, Accessibility, ADB, and Termux/OpenClaw</h2>
+            <p>
+              ClawMobile for Android includes an app-local runtime that can run tasks inside the Android app. Depending on your settings and permissions, it may use local task history, saved memory, Android share-intent content selected by you, Android Accessibility summaries of the current visible screen, temporary screenshots captured through the Accessibility service, on-device OCR through Google ML Kit text recognition, visible Android intents, and optional built-in ADB support.
+            </p>
+            <p>
+              The optional Android Accessibility service can retrieve visible window content, observe supported accessibility events, perform gestures, and capture temporary screenshots as allowed by Android while the service is active. This can include text, labels, view IDs, package names, and visible UI structure from other apps. ClawMobile uses this information to perform user-requested tasks, build compact screen summaries, record demos for skill creation, and provide runtime observations to a configured model provider when relevant. You can disable the Accessibility service at any time in Android Settings.
+            </p>
+            <p>
+              Optional built-in ADB support requires you to enable Android developer options and approve debugging trust prompts. When enabled, ADB may allow ClawMobile to send input events, key events, text input, and diagnostic shell commands supported by the app. ADB is optional and is not required for basic app-local tasks.
+            </p>
+            <p>
+              ClawMobile can optionally connect to a Termux/OpenClaw backend controlled by you. In that mode, the Android app may use SSH to install, repair, start, or inspect a local runtime inside Termux. Termux/OpenClaw may process task content, model settings, tool observations, files, shell commands, ADB-related setup, OCR dependencies, skill data, and backend logs depending on what you configure and run.
+            </p>
+          </article>
+
+          <article class="card" id="ios">
+            <span class="label">iOS app</span>
+            <h2>iOS permissions and platform boundaries</h2>
+            <p>
+              ClawMobile asks for iOS permissions only when you open or start a feature that needs them. Depending on the features you use, the app may request access to microphone and speech recognition for voice input; camera, photos, files, OCR, or image-understanding content you select; notifications for task status, reminders, scheduled follow-ups, and approval prompts; Shortcuts and App Intents for user-created workflows; calendar and reminders for user-requested actions; contacts only when you ask ClawMobile to search contacts; and location only when you ask for a location-related task and grant permission.
+            </p>
+            <p>
+              You can grant, deny, or revoke iOS permissions in iOS Settings.
+            </p>
+            <p>
+              ClawMobile for iOS cannot freely control your phone, read other apps, run arbitrary shell commands, or operate as a hidden background agent. The app works through user-visible app content, iOS permission prompts, supported system handoffs, and actions you start or approve. When iOS only allows a draft, share sheet, prompt, or handoff, ClawMobile shows that boundary where applicable.
+            </p>
+          </article>
+
+          <article class="card" id="social">
+            <span class="label">Social</span>
+            <h2>Trusted contacts and Nostr relays</h2>
+            <p>
+              ClawMobile includes optional trusted-contact messaging and package sharing through user-configured Nostr relays.
+            </p>
+            <p>
+              Social is not a public ClawMobile social network. ClawMobile does not provide a public feed, discovery page, comments system, moderation service, or hosted content service in the current builds.
+            </p>
+            <p>
+              When you use Social, messages and events may be sent through configured Nostr relays. Public Nostr events can be visible to relay operators and other users according to the Nostr protocol. Encrypted or structured payloads may still expose metadata such as public keys, relay URLs, timestamps, event IDs, and network metadata. You can remove trusted contacts and local Social conversation history where the app provides controls.
+            </p>
+          </article>
+
+          <article class="card" id="network">
+            <span class="label">Network</span>
+            <h2>Web, links, and network requests</h2>
+            <p>
+              ClawMobile requests network access for model providers, user-configured runtime endpoints, Nostr relays, URL reading, setup downloads, and other features that require networking. When you use web or link-reading features, ClawMobile may request URLs you select or provide.
+            </p>
+            <p>
+              Remote websites, relays, model providers, endpoint operators, and user-configured backends may receive normal network metadata such as IP address, user agent, request time, and requested URL.
+            </p>
+            <p>
+              On Android, the app allows cleartext HTTP only for loopback addresses such as 127.0.0.1 and localhost so it can talk to local runtimes on the same device.
+            </p>
+            <p>
+              If you visit ClawMobile web pages, the website host may process standard server logs needed to operate and secure the site. ClawMobile does not currently use advertising cookies or third-party analytics SDKs in the iOS or Android app.
+            </p>
+          </article>
+
+          <article class="card" id="sharing">
+            <span class="label">Sharing</span>
+            <h2>When information is shared or transmitted</h2>
+            <p>ClawMobile may share or transmit information only in these situations:</p>
+            <ul>
+              <li>to the model provider or compatible endpoint you configure when you run a model-backed task;</li>
+              <li>to websites, APIs, relays, local runtimes, or user-configured endpoints you ask the app to contact;</li>
+              <li>through Android share intents, iOS share sheets, Shortcuts, App Intents, notification actions, drafts, or other system handoffs you start or approve;</li>
+              <li>through Nostr relays you configure for Social messaging or package sharing;</li>
+              <li>through GitHub releases, Google Play, App Store, YouTube embeds, Formspree form handling, and other third-party services you open or use from ClawMobile web pages or app flows;</li>
+              <li>if required to comply with applicable law or to protect the app, users, or others from abuse or security threats.</li>
+            </ul>
+          </article>
+
+          <article class="card" id="retention">
+            <span class="label">Retention</span>
+            <h2>Data retention and deletion</h2>
+            <p>
+              Local task history, memory, artifacts, settings, imported content, skills, demo recordings, runtime logs, Nostr data, backend configuration, and Social data remain on your device until you delete them, clear the relevant in-app data, uninstall the app, clear app data, or remove the app's local data through the operating system.
+            </p>
+            <p>
+              You can delete task conversations, manage memory entries, clear saved model API keys, remove trusted contacts, delete local Social conversation history, and manage skill drafts where the app provides controls.
+            </p>
+            <p>
+              Data sent to a model provider, website, relay, Termux/OpenClaw backend, endpoint, app store, or other third-party service is handled according to that service's own policies and controls.
+            </p>
+          </article>
+
+          <article class="card" id="choices">
+            <span class="label">Controls</span>
+            <h2>Your choices</h2>
+            <p>You can:</p>
+            <ul>
+              <li>choose whether to configure a model provider;</li>
+              <li>choose which provider, model, base URL, and API key to use;</li>
+              <li>clear saved model API keys;</li>
+              <li>choose which tasks to run;</li>
+              <li>choose whether to use Android app-local runtime features, optional ADB, or optional Termux/OpenClaw backend features;</li>
+              <li>grant, deny, or revoke Android notification and Accessibility permissions;</li>
+              <li>grant, deny, or revoke iOS permissions in iOS Settings;</li>
+              <li>disable app-local screen-content tools, control tools, or local memory tools where the app provides controls;</li>
+              <li>manage task history, memory, artifacts, reusable task drafts, skill drafts, trusted contacts, and local Social history where controls are available;</li>
+              <li>avoid sending content to a model provider by not running model-backed tasks.</li>
+            </ul>
+          </article>
+
+          <article class="card" id="children">
+            <span class="label">Children</span>
+            <h2>Children</h2>
+            <p>
+              ClawMobile is not intended for children and should not be used by children.
+            </p>
+          </article>
+
+          <article class="card warning" id="security">
+            <span class="label">Security</span>
+            <h2>Security</h2>
+            <p>
+              ClawMobile uses platform storage features such as iOS Keychain, Android app-private storage, and Android Keystore-backed encryption for supported sensitive secret material. No storage or network system can be guaranteed perfectly secure.
+            </p>
+            <p>
+              Avoid storing or sending sensitive information to model providers, relays, backends, websites, app stores, or other apps unless you understand the risks. Review generated skills, demo recordings, logs, shared packages, screenshots, and artifacts before sharing them publicly or with trusted contacts.
+            </p>
+          </article>
+
+          <article class="card" id="future">
+            <span class="label">Future services</span>
+            <h2>Future services</h2>
+            <p>
+              If ClawMobile adds hosted accounts, payments, subscriptions, cloud sync, analytics, crash reporting, or a ClawMobile-hosted model router, this policy will be updated before those services are made available to users.
+            </p>
+          </article>
+
+          <article class="card" id="changes">
+            <span class="label">Updates</span>
+            <h2>Changes to this policy</h2>
+            <p>
+              We may update this Privacy Policy as ClawMobile changes. The updated policy will show a new "Last updated" date. Material changes will be communicated in the app or on the ClawMobile website where appropriate.
+            </p>
+          </article>
+
+          <article class="card" id="contact">
+            <span class="label">Contact</span>
+            <h2>Contact</h2>
+            <p>
+              For privacy or support questions, visit https://clawmobile.ae/contact or use the public ClawMobile GitHub repository.
+            </p>
+            <div class="btnRow">
+              <a class="btn primary" href="https://github.com/ClawMobile/ClawMobile" target="_blank" rel="noopener noreferrer">Open GitHub</a>
+              <a class="btn" href="/">Back to homepage</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      © 2026 ClawMobile · <a href="/privacy">Privacy</a> · <a href="https://github.com/ClawMobile/ClawMobile" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://github.com/ClawMobile/ClawMobile/releases/latest" target="_blank" rel="noopener noreferrer">Releases</a><br />
+      Android, Google Play, App Store, Telegram, WhatsApp, GitHub, YouTube, Formspree, Nostr relays, model providers, and other named services are third-party services. No affiliation or endorsement is implied.
+    </div>
+  </footer>
+</body>
+</html>
